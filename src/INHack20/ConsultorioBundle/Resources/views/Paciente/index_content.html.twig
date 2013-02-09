@@ -1,0 +1,45 @@
+<div class="center">
+    <table class="records_list tabla-1">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombres y Apellidos</th>
+                <th>Edad</th>
+                <th>Sexo</th>
+                <th>Diagnostico</th>
+                <th>Tratamiento</th>
+                <th>Fechacreado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('paciente_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.nombreCompleto }}</td>
+                <td>{{ entity.edad }}</td>
+                <td>{{ entity.sexo | upper }}</td>
+                <td>{{ entity.diagnostico }}</td>
+                <td>{{ entity.tratamiento }}</td>
+                <td>{% if entity.fechaCreado %}{{ entity.fechaCreado|date('d/m/Y g:i a') }}{% endif %}</td>
+                <td>
+                    <ul class="acciones">
+                        <li>
+                            <a href="{{ path('paciente_show', { 'id': entity.id }) }}">Ver</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('paciente_edit', { 'id': entity.id }) }}">Editar</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8" class="center">
+                    No se han encontrado resultados
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

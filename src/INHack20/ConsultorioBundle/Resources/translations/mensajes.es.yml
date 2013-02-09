@@ -1,0 +1,27 @@
+diario:
+  new:
+    submit: Abrir
+    titulo: Diario
+  index:
+    new: Abrir
+    
+mensaje:
+  tipo:
+    1: Operacion Exitosa!
+    2: Advertencia!
+    3: Error!
+  codigo:
+    1: Debe abrir una nueva hoja en el diario para registrar los pacientes atendidos el dia de hoy
+    2: Se ha registrado correctamente
+    3: Se han actualizado los datos correctamente
+    #Cuando ocurre una exepcion al guardar los datos
+    4: Ocurrio un error al guardar los datos
+    #Cuando no se cumple las restricciones de los campos
+    5: Por favor verifique los datos ingresados e intente nuevamente
+    #Cuando no se puede actualizar los campos por no cumplir la restrinciones
+    6: No se ha podido actualizar los datos, por favor verifiquelos
+    7: El registro se ha eliminado correctamente
+    8: No se puede eliminar un Diario cuando tiene Pacientes atendidos
+    9: No se han encontrado resultados, debe abrir una hoja nueva para registrar los pacientes del dia de hoy
+    10: No se han atendido pacientes el dia de hoy
+    11: No se ha podido eliminar el registro

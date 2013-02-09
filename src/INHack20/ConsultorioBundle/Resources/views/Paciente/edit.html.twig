@@ -1,0 +1,23 @@
+{% extends 'INHack20ConsultorioBundle::layout.html.twig' %}
+{% block contenido %}
+<div class="center">
+    <h1 class="t1 separator-bottom">Editar Paciente</h1>
+
+    <form action="{{ path('paciente_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+        {{ form_widget(edit_form) }}
+        <p class="separator-top">
+            <button class="boton-v" type="submit">Guardar</button>
+        </p>
+    </form>
+
+    <div class="record_actions separator-bottom">
+        <a class="boton-v float-left" href="{{ path('paciente') }}">
+            Regresar
+        </a>
+        <form action="{{ path('paciente_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+                <button class="boton-eliminar" type="submit">Eliminar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

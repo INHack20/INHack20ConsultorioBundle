@@ -1,0 +1,138 @@
+html 	{width:100%; }
+body	{background:#4E595F url('../images/body-bg.gif') repeat-x 0 0; margin:0; padding:0; font-family:"Trebuchet MS", Verdana, Arial, "Times New Roman", serif; font-size:80%; color:#000000; width:100%; }
+
+p		{padding:0 0 15px 0; margin:0; line-height:140%; }
+h1		{margin:0; padding:0; font-size:130%; font-weight:normal; }
+h2		{margin:0; padding:0 0 20px 0; font-size:140%; font-weight:normal; }
+
+
+/*link styling*/
+a			{color:#000000; text-decoration:underline; }
+a:hover		{text-decoration:none; }
+#footer a	{color:#637076; }
+
+
+/*structural elements*/
+.section 		{width:100%; border-bottom:1px solid #637076 }
+
+#header			{background:#1A292F; margin:0 auto; text-align:left; padding:20px 20px 20px 20px; width:830px; border-left:1px solid #637076; border-right:1px solid #637076; }
+#container		{margin:0 auto; text-align:left; padding:0 20px 20px 20px; width:830px; border-left:1px solid #637076; border-right:1px solid #637076; }
+#sub-container		{margin:0 auto; padding:20px 20px 20px 20px; width:830px; border-left:1px solid #637076; border-right:1px solid #637076; }
+h1#logo			{background:#E8EDF7; float:left; padding:7px 20px; width:110px; border:1px solid #FFFFFF; text-align:center; min-height:24px; }
+#pictureRail	{text-align:center; }
+#news			{background:#E8EDF7; float:left; width:200px; padding:20px 20px 5px 20px; border:1px solid #FFFFFF; }
+#menu			{background:#1A292F; margin:0 0 0 2px; border:1px solid #FFFFFF; padding:10px; color:#FFFFFF; text-align:center; }
+#contenido		{background:#E8EDF7; margin:20px 0 0 2px; padding:20px 20px 5px 20px; border:1px solid #FFFFFF; min-height: 400px; }
+#footer			{margin:0 auto; text-align:left; padding:20px 20px 60px 20px; width:830px; border-left:1px solid #637076; border-right:1px solid #637076; }
+#footer p		{background:#1A292F; padding:10px; font-size:90%; color:#637076; border:1px solid #637076; text-align:center; }
+
+
+/*section dependant style over-rides*/
+#news h3	{margin:0; padding:0 0 20px 0; color:#000000; font-size:120%; font-weight:bold; }
+#news p		{padding:10px 0; border-top:1px solid #000000; }
+
+#header p	{text-align:center; font-size:170%; color:#E8EDF7; padding:45px 0 0 0; }
+
+ul#menu 	{ }
+ul#menu li	{margin:0; padding:0; list-style:none; display:inline; }
+ul#menu  a	{color:#FFFFFF; text-decoration:none; padding:10px 15px; }
+
+#pictureRail img	{margin:20px 10px;border:1px solid #FFFFFF;  }
+#contenido img		{border:1px solid #000000; float:right; margin:0 0 20px 20px; }
+
+
+/*This adds a little arrow under the menu item of the page you are on. (handy for navigation and usability)
+To modify, edit the <body> tag by changing the id.
+e.g, if the page you are on is the contact page, change: <body id="home"> to <body id="contact">*/
+#home #homeLink,
+#about #aboutLink,
+#services #servicesLink,
+#portfolio #portfolioLink,
+#contact #contactLink
+{background:url('../images/menu-a-bg.gif') no-repeat center bottom; }
+
+
+/*just makes sure the content doesn't spill out the boxes, see http://www.positioniseverything.net/easyclearing.html for details*/
+.clearfix:after {
+    content: "."; 
+    display: block; 
+    height: 0; 
+    clear: both; 
+    visibility: hidden;
+}
+
+.clearfix {display: inline-block;}
+
+/* Hides from IE-mac \*/
+* html .clearfix {height: 1%;}
+.clearfix {display: block;}
+/* End hide from IE-mac */
+
+div#cargando{
+ 
+ width:100%;
+ height:100%;
+ position:absolute;
+ top:79%;
+ left:-33%;
+ opacity:0.9;
+ display:none;
+    
+}
+
+.t1{
+    color: #2F6E31;
+    font-size: 20px;
+}
+.t2{
+    color: #225023;
+}
+
+.records_list {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+input, textarea, select {
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    /*IE 7 AND 8 DO NOT SUPPORT BORDER RADIUS*/
+    -moz-box-shadow: 0px 0px 2px #000000;
+    -webkit-box-shadow: 0px 0px 2px #000000;
+    box-shadow: 0px 0px 2px #000000;
+    /*IE 7 AND 8 DO NOT SUPPORT BLUR PROPERTY OF SHADOWS*/
+}
+
+.center {text-align: center; }
+.left {text-align: left;}
+.right { text-align: right; }
+
+div.center{
+    text-align: center;
+}
+
+div.center table, div.center form table {
+    margin: 0 auto;
+    text-align: left;
+}
+
+.separator-top {
+    margin-top: 2em;
+}
+.separator-bottom {
+    margin-bottom: 2em;
+}
+
+ul.acciones, ul.record_actions {
+    list-style: none;
+    list-style-type: none;
+}
+
+div.record_actions {
+    margin-bottom: 4em;
+}
+
+.float-left {
+    float: left;
+}

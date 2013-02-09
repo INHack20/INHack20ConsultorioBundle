@@ -1,0 +1,48 @@
+{% extends 'INHack20ConsultorioBundle::layout.html.twig' %}
+{% block contenido %}
+<div class="center">
+    <h1 class="t1 separator-bottom">Diario</h1>
+    <table class="record_properties tabla-1">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr class="odd">
+                <th>Medico</th>
+                <td>{{ entity.medico }}</td>
+            </tr>
+            <tr>
+                <th>Municipio</th>
+                <td>{{ entity.municipio }}</td>
+            </tr>
+            <tr class="odd">
+                <th>Asic</th>
+                <td>{{ entity.asic }}</td>
+            </tr>
+            <tr>
+                <th>Consultorio</th>
+                <td>{{ entity.consultorio }}</td>
+            </tr>
+            <tr class="odd">
+                <th>Fecha</th>
+                <td>{{ entity.fechaCreado|date('d/m/Y g:i:s a') }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="record_actions separator-top">
+        <a class="boton-v" href="{{ path('diario_edit', { 'id': entity.id }) }}">
+            Editar
+        </a>
+        &nbsp;
+        <a class="boton-v" href="{{ path('diario') }}">
+            Regresar
+        </a>
+    </div>
+    {% if entity.pacientes | length > 0 %}
+        <div class="separator-top separator-bottom">
+            {% include 'INHack20ConsultorioBundle:Paciente:index_content.html.twig' with {'entities' : entity.pacientes } %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+
+<h1>Editar Usuario</h1>
+<br/><br/>
+    <fieldset>
+         <legend>Datos</legend>
+            <form action="{{ path('fos_user_update_usuario',{'id' : usuario.id }) }}" {{ form_enctype(form) }} method="POST" class="fos_user_profile_edit">
+                {{ form_widget(form,{'attr' : {'align' : 'center'} }) }}
+                {{ form_rest(form) }}
+                <br/><br/>
+                <p align="center">
+                    <button type="submit" class="css3button">
+                        <img src="{{ asset('bundles/inhack20user/images/guardar.png') }}" width="16" height="16" alt="" />
+                        {{ 'profile.edit.submit'|trans({}, 'FOSUserBundle') }}</button>
+                </p>
+            </form>
+    </fieldset>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#inhack20_user_profile_expiresAt").datepicker();
+    });
+</script>

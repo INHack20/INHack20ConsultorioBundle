@@ -1,0 +1,60 @@
+<div class="fos_user_user_show">
+    <h1>Datos del usuario</h1>
+    <br/><br/>
+    <table class="tableCSS" style="width: auto">
+        <thead>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+        </thead>
+        <tr class="even">
+            <td>{{ 'profile.show.username'|trans({}, 'FOSUserBundle') }}:</td>
+            <td>{{ user.username }}</td>
+        </tr>
+        <tr class="odd">
+            <td>{{ 'profile.show.email'|trans({}, 'FOSUserBundle') }}:</td>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr class="even">
+            <td>{{ 'profile.show.nombre'|trans({}, 'FOSUserBundle') }}:</td>
+            <td>{{ user.nombre }}</td>
+        </tr>
+        <tr class="odd">
+            <td>{{ 'profile.show.apellido'|trans({}, 'FOSUserBundle') }}:</td>
+            <td>{{ user.apellido }}</td>
+        </tr>
+        <tr class="even">
+            <td>{{ 'profile.show.cedula'|trans({}, 'FOSUserBundle') }}:</td>
+            <td>{{ user.cedula }}</td>
+        </tr>
+        <tr class="odd">
+            <td>{{ 'profile.show.cargo'|trans({}, 'FOSUserBundle') }}: </td>
+            <td>{{ user.cargo }}</td>
+        </tr>
+        <tr class="even">
+            <td>{{ 'profile.show.estado'|trans({}, 'FOSUserBundle') }}:</td>
+            <td>{% if user.estado %}{{ user.estado.nombre }}{% endif %}</td>
+        </tr>
+
+            <tr class="odd">
+                <td>{{ 'profile.show.activada'|trans({}, 'FOSUserBundle') }}:</td>
+                <td>{% if user.enabled %}<font color="green">SI</font>{% else %}<font color="red">No</font>{% endif %}</td>
+            </tr>
+            <tr class="even">
+                <td>{{ 'profile.show.bloqueada'|trans({}, 'FOSUserBundle') }}:</td>
+                <td>{% if user.locked %}<font color="red">Si</font>{% else %}<font color="green">No</font>{% endif %}</td>
+            </tr>
+            <tr class="odd">
+                <td>{{ 'profile.show.roleDescripcion'|trans({}, 'FOSUserBundle') }}:</td>
+                <td>{{ user.roleDescripcion }}</td>
+            </tr>
+        <thead>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+        </thead>
+    </table>
+    
+</div>

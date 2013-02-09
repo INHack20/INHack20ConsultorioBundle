@@ -1,0 +1,53 @@
+<link rel="stylesheet" type="text/css" href="{{ asset('bundles/inhack20consultorio/css/superfish.css') }}" media="screen">
+<!--<script type="text/javascript" src="../js/jquery-1.2.6.min.js"></script>-->
+
+<script type="text/javascript" src="{{ asset('bundles/inhack20consultorio/js/superfish.js') }}"></script>
+<script type="text/javascript">
+    // initialise plugins
+    jQuery(function(){
+        jQuery('ul.sf-menu').superfish();
+    });
+</script>
+
+<ul class="sf-menu">
+    <li>
+            <li><a href="{{ path('_inicio') }}">Inicio</a></li>
+    </li>
+    <li class="current">
+            <a href="#a">Diario</a>
+            <ul>
+                    <li class="current"><a href="{{ path('diario_today') }}">Hoy</a></li>
+                    <li><a href="{{ path('diario_new') }}">Nuevo</a></li>
+                    <li><a href="{{ path('diario_new') }}">Consulta</a></li>
+                    <li><a href="{{ path('diario_new') }}">Reporte</a></li>
+            </ul>
+    </li>
+    <li>
+            <a href="#a">Pacientes</a>
+            <ul>
+                    <li class="current"><a href="{{ path('paciente_findtoday') }}">Hoy</a></li>
+                    <li class="current"><a href="{{ path('paciente_new') }}">Nuevo</a></li>
+                    <li class="current"><a href="{{ path('paciente_new') }}">Consulta</a></li>
+                    <li class="current"><a href="{{ path('paciente_new') }}">Reporte</a></li>
+            </ul>
+    </li>
+    <li>
+        <a href="#a">Configurar</a>
+            <ul>
+                    <li><a href="{{ path('tipoconsulta') }}">Tipos de Consulta</a></li>
+                    <li>
+                        <a href="#ab">Usuario</a>
+                        <ul>
+                            <li><a href="{{ path('fos_user_profile_show') }}">Mis Datos</a></li>
+                            <li><a href="{{ path('fos_user_change_password') }}">Cambiar Contrase&ntilde;a</a></li>
+                            <li><a href="{{ path('fos_user_registration_register') }}">Registrar Usuario</a></li>
+                            <li><a href="{{ path('fos_user_lista_usuarios') }}">Administrar Usuario</a></li>
+                        </ul>
+                    </li>
+
+            </ul>
+    </li>
+    <li>
+        <a href="{{ path('fos_user_security_logout') }}">Cerrar Sesion</a>
+    </li>
+</ul>
