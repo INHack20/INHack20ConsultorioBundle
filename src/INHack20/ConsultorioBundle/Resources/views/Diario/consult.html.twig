@@ -1,0 +1,42 @@
+{% extends app.request.isXmlHttpRequest ? 'INHack20ConsultorioBundle::layout_ajax.html.twig' :'INHack20ConsultorioBundle::layout.html.twig' %}
+{% block contenido %}
+    <h1 class="t1 center separator-bottom">{{ 'diario.consult' | trans({},'mensajes') }}</h1>
+    <div class="center">
+        <form action="{{ path('diario_consult') }}" id="inhack20_consultoriobundle_consultype" method="post" {{ form_enctype(form) }}>
+            {{ form_widget(form) }}
+            <p class="separator-top">
+                <button type="submit" class="boton-v">{{ 'search' | trans({},'mensajes') }}</button>
+            </p>
+        </form>
+    </div>
+    <div id="result" class="center" ></div>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var form = "inhack20_consultoriobundle_consultype";
+            var options = {
+                target: '#result',
+            }
+            $("#"+form).ajaxForm(options);
+            var idFechaDesde = 'inhack20_consultoriobundle_consultype_fechaDesde';
+            var idFechaHasta = 'inhack20_consultoriobundle_consultype_fechaHasta';
+            
+            $( "#"+idFechaDesde ).datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 1,
+                onClose: function( selectedDate ) {
+                    $( "#"+idFechaHasta ).datepicker( "option", "minDate", selectedDate );
+                }
+            });
+            $( "#"+idFechaHasta ).datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                numberOfMonths: 1,
+                onClose: function( selectedDate ) {
+                    $( "#"+idFechaDesde ).datepicker( "option", "maxDate", selectedDate );
+                }
+            });
+            
+        });
+    </script>
+{% endblock %}

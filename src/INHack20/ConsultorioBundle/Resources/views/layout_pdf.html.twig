@@ -1,0 +1,50 @@
+{% block header %}
+    <table style="text-align: center; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+        <tbody>
+            <tr align="center">
+                <td>{{ 'header.1' | trans({},'pdf') }}</td>
+            </tr>
+            <tr align="center">
+                <td>{{ 'header.2' | trans({},'pdf') }}</td>
+            </tr>
+            <tr align="center">
+                <td>{{ 'header.3' | trans({},'pdf') }}</td>
+            </tr>
+            <tr align="center">
+                <td>{{ 'header.4' | trans({},'pdf') }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
+{% block title %}
+<br/>
+    <table style="width: 100%;" border="0" cellpadding="2" cellspacing="2">
+        <tbody>
+            <tr>
+                <td>{{ 'title.estado' | trans({},'pdf') }}:</td>
+                <td>{{ 'title.nombreMedico' | trans({},'pdf') }}:</td>
+                <td>{{ 'title.fecha' | trans({},'pdf') }}:</td>
+            </tr>
+            <tr>
+                <td>{{ 'title.municipio' | trans({},'pdf') }}:</td>
+                <td>{{ 'title.asic' | trans({},'pdf') }}:</td>
+                <td>{{ 'title.consultorio' | trans({},'pdf') }}:</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
+{% block content %}
+{% endblock %}
+{% block footer %}
+<table style="width: 100%">
+        <tr>
+            <td style="text-align: left">
+                RESUMEN:<br/>
+                CASOS VISTOS EN CONSULTA:<br/>
+                CASOS VISTOS EN TERRENO:<br/>
+                TOTAL DE CASOS VISTOS:<br/>
+            </td>
+            <td style="text-align: right">FIRMA:</td>
+        </tr>
+    </table>
+{% endblock %}

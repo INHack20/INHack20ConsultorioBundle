@@ -80,3 +80,7 @@ fos_user:
                 
 parameters:
     fos_user.template.theme: ~
+    
+white_october_tcpdf:
+    tcpdf:
+      pdf_page_orientation: L

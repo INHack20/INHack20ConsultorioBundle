@@ -2,49 +2,7 @@
 {% block contenido %}
 <h1 class="t1 center separator-bottom">Diarios</h1>
 <div class="center">
-    <table class="records_list tabla-1">
-        <thead>
-            <tr>
-                <th>&nbsp;</th>
-                <th>Medico</th>
-                <th>Municipio</th>
-                <th>Asic</th>
-                <th>Consultorio</th>
-                <th>Fecha</th>
-                
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr {% if loop.index % 2 == 0 %}class="odd"{% endif %}>
-                <td><a href="{{ path('diario_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.medico }}</td>
-                <td>{{ entity.municipio }}</td>
-                <td>{{ entity.asic }}</td>
-                <td>{{ entity.consultorio }}</td>
-                <td>{% if entity.fechaCreado %}{{ entity.fechaCreado|date('d/m/Y g:i a') }}{% endif %}</td>
-                
-                <td>
-                    <ul class="acciones">
-                        <li>
-                            <a href="{{ path('diario_show', { 'id': entity.id }) }}">ver</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('diario_edit', { 'id': entity.id }) }}">editar</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% else %}    
-            <tr>
-                <td colspan="7" class="center">
-                    No se han encontrado resultados.
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% include 'INHack20ConsultorioBundle:Diario:index_content.html.twig' %}
 </div> 
     <div class="right separator-top">
         <a href="{{ path('diario_new') }}" class="boton-v">{{ 'diario.index.new' | trans({},'mensajes') }}</a>
