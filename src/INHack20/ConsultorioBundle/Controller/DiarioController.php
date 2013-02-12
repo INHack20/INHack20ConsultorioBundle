@@ -351,7 +351,7 @@ $pdf->AddPage();
 $pdf->writeHTML($this->render('INHack20ConsultorioBundle:Diario:exportPDF.html.twig'), true, false, true, false, '');
 
 //Close and output PDF document
-//$pdf->Output('example_006.pdf', 'I');
+$pdf->Output('example_006.pdf', 'I');
         return $this->render('INHack20ConsultorioBundle:Diario:exportPDF.html.twig');
     }
 }
