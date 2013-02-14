@@ -15,6 +15,7 @@ class PacienteType extends AbstractType
             ->add('nombreCompleto',null,array(
                 'label' => 'Nombre Completo',
             ))
+            ->add('cedula')
             ->add('edad')
             ->add('sexo','choice',array(
                 'choices' => array('m' => 'Masculino', 'f' => 'Femenino'),

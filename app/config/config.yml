@@ -82,5 +82,6 @@ parameters:
     fos_user.template.theme: ~
     
 white_october_tcpdf:
+    class: "INHack20\ConsultorioBundle\TCPDF\ReportePDF"
     tcpdf:
-      pdf_page_orientation: L
+      k_tcpdf_external_config: false

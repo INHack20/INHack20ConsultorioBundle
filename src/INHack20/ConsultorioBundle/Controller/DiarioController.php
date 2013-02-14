@@ -308,50 +308,73 @@ class DiarioController extends Controller
     public function exportPDFAction(){
         
         $pdf= $this->get('white_october.tcpdf')->create();
+        $translator = $this->get('translator');
         
         // set document information
-$pdf->SetCreator('Symfony2 PDF');
-$pdf->SetAuthor('Barrio Adentro I');
-$pdf->SetTitle('Reporte');
-$pdf->SetSubject('Barrio Adentro I');
-$pdf->SetKeywords('Barrio Adentro');
-/*
-// set default header data
-$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 006', PDF_HEADER_STRING);
+        $pdf->SetCreator('Symfony2 PDF');
+        $pdf->SetAuthor('Barrio Adentro I');
+        $pdf->SetTitle('Reporte');
+        $pdf->SetSubject('Barrio Adentro I');
+        $pdf->SetKeywords('Barrio Adentro');
+        $pdf->setTranslator($translator);
+        //set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP + 15, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        $pdf->AddPage();
+        
+$html = '
+<table style="width: 100%;" border="0" cellpadding="2" cellspacing="2">
+        <tbody>
+            <tr>
+                <td>'.$translator->trans('title.estado',array(),'pdf').':estado</td>
+                <td>'.$translator->trans('title.nombreMedico',array(),'pdf').':nombreMedico</td>
+                <td>'.$translator->trans('title.fecha',array(),'pdf').':fecha</td>
+            </tr>
+            <tr>
+                <td>'.$translator->trans('title.municipio',array(),'pdf').':municipio</td>
+                <td>'.$translator->trans('title.asic',array(),'pdf').':asic</td>
+                <td>'.$translator->trans('title.consultorio',array(),'pdf').':consultorio</td>
+            </tr>
+        </tbody>
+</table>
+';
 
-// set header and footer fonts
-$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+// print a block of text using Write()
+//$pdf->Write($h=0, $txt, $link='', $fill=0, $align='J', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
+$pdf->writeHTML($html, true, false, true, false, '');
 
-// set default monospaced font
-$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-//set margins
-$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-//set auto page breaks
-$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-//set image scale factor
-$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-//set some language-dependent strings
-$pdf->setLanguageArray($l);
-
-// ---------------------------------------------------------
-*/
-// set font
-//$pdf->SetFont('dejavusans', '', 10);
-
-// add a page
-$pdf->AddPage();
-
-$pdf->writeHTML($this->render('INHack20ConsultorioBundle:Diario:exportPDF.html.twig'), true, false, true, false, '');
-
-//Close and output PDF document
-$pdf->Output('example_006.pdf', 'I');
-        return $this->render('INHack20ConsultorioBundle:Diario:exportPDF.html.twig');
+$html = '
+    
+    <table style="width: 100%; text-align:center; " border="1" cellpadding="0" cellspacing="0">
+        <tr>
+            <th style="width: 4%;">Nº</th>
+            <th style="width: 8%;">CEDULA</th>
+            <th style="width: 17%;">NOMBRES Y APELLIDOS</th>
+            <th style="width: 4%;">E</th>
+            <th style="width: 4%;">S</th>
+            <th style="width: 20%;">DIRECCIÓN</th>
+            <th style="width: 4%;">T</th>
+            <th style="width: 20%;">DAGNÓSTICO</th>
+            <th style="width: 20%;">TRATAMIENTO</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>19108122</td>
+            <td>Carlos Mendoza</td>
+            <td>E</td>
+            <td>S</td>
+            <td>DIRECCIÓN</td>
+            <td>CN</td>
+            <td>DAGNÓSTICODAGNÓSTICODAGNÓSTICODAGNÓSTICO</td>
+            <td>TRATAMIENTO</td>
+        </tr>
+    </table>
+';
+$pdf->SetFont('helvetica', '', 9);
+$pdf->writeHTML($html, true, false, true, false, '');
+       return new \Symfony\Component\HttpFoundation\Response($pdf->Output('example_006.pdf', 'I'),
+                200,array('Content-Type' => 'application/pdf'));
     }
 }

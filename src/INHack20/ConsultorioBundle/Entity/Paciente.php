@@ -21,7 +21,15 @@ class Paciente
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
+    
+    /**
+     *
+     * @var string
+     * 
+     * @ORM\Column(name="cedula", type="string", length=30) 
+     */
+    private $cedula;
+    
     /**
      * @var string
      *
@@ -302,5 +310,28 @@ class Paciente
     public function getSexo()
     {
         return $this->sexo;
+    }
+
+    /**
+     * Set cedula
+     *
+     * @param string $cedula
+     * @return Paciente
+     */
+    public function setCedula($cedula)
+    {
+        $this->cedula = $cedula;
+    
+        return $this;
+    }
+
+    /**
+     * Get cedula
+     *
+     * @return string 
+     */
+    public function getCedula()
+    {
+        return $this->cedula;
     }
 }
