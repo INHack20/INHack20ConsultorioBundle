@@ -3,7 +3,7 @@
 namespace INHack20\ConsultorioBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use INHack20\ConsultorioBundle\Model\Persona as BasePersona;
 /**
  * Paciente
  *
@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="INHack20\ConsultorioBundle\Repository\PacienteRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Paciente
+class Paciente extends BasePersona
 {
     /**
      * @var integer
@@ -22,35 +22,6 @@ class Paciente
      */
     private $id;
     
-    /**
-     *
-     * @var string
-     * 
-     * @ORM\Column(name="cedula", type="string", length=30) 
-     */
-    private $cedula;
-    
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nombreCompleto", type="string", length=100)
-     */
-    private $nombreCompleto;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="edad", type="integer")
-     */
-    private $edad;
-    
-    /**
-     *
-     * @var type 
-     * @ORM\Column(name="sexo", type="string", length=5)
-     */
-    private $sexo;
-
     /**
      * @var string
      *
@@ -66,20 +37,6 @@ class Paciente
     private $tratamiento;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="fechaCreado", type="datetime")
-     */
-    private $fechaCreado;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="fechaModificado", type="datetime", nullable=true)
-     */
-    private $fechaModificado;
-    
-    /**
      * @ORM\ManyToOne(targetEntity="Diario",inversedBy="pacientes")
      * @ORM\JoinColumn(name="diario_id",referencedColumnName="id")
      * @var Diario 
@@ -92,7 +49,7 @@ class Paciente
      * @ORM\JoinColumn(name="tipoConsulta_id",referencedColumnName="id")
      */
     protected $tipoConsulta;
-
+    
     /**
      * Get id
      *
@@ -101,52 +58,6 @@ class Paciente
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set nombreCompleto
-     *
-     * @param string $nombreCompleto
-     * @return Paciente
-     */
-    public function setNombreCompleto($nombreCompleto)
-    {
-        $this->nombreCompleto = $nombreCompleto;
-    
-        return $this;
-    }
-
-    /**
-     * Get nombreCompleto
-     *
-     * @return string 
-     */
-    public function getNombreCompleto()
-    {
-        return $this->nombreCompleto;
-    }
-
-    /**
-     * Set edad
-     *
-     * @param integer $edad
-     * @return Paciente
-     */
-    public function setEdad($edad)
-    {
-        $this->edad = $edad;
-    
-        return $this;
-    }
-
-    /**
-     * Get edad
-     *
-     * @return integer 
-     */
-    public function getEdad()
-    {
-        return $this->edad;
     }
 
     /**
@@ -196,54 +107,6 @@ class Paciente
     }
 
     /**
-     * Set fechaCreado
-     *
-     * @param \DateTime $fechaCreado
-     * @return Paciente
-     * @ORM\PrePersist
-     */
-    public function setFechaCreado()
-    {
-        $this->fechaCreado = new \DateTime();
-    
-        return $this;
-    }
-
-    /**
-     * Get fechaCreado
-     *
-     * @return \DateTime 
-     */
-    public function getFechaCreado()
-    {
-        return $this->fechaCreado;
-    }
-
-    /**
-     * Set fechaModificado
-     *
-     * @param \DateTime $fechaModificado
-     * @return Paciente
-     * @ORM\PreUpdate
-     */
-    public function setFechaModificado()
-    {
-        $this->fechaModificado = new \DateTime();
-    
-        return $this;
-    }
-
-    /**
-     * Get fechaModificado
-     *
-     * @return \DateTime 
-     */
-    public function getFechaModificado()
-    {
-        return $this->fechaModificado;
-    }
-
-    /**
      * Set diario
      *
      * @param \INHack20\ConsultorioBundle\Entity\Diario $diario
@@ -288,50 +151,28 @@ class Paciente
     {
         return $this->tipoConsulta;
     }
-
+    
     /**
-     * Set sexo
+     * Set fechaCreado
      *
-     * @param string $sexo
-     * @return Paciente
+     * @ORM\PrePersist
      */
-    public function setSexo($sexo)
+    public function setFechaCreado()
     {
-        $this->sexo = $sexo;
+        $this->fechaCreado = new \DateTime();
     
         return $this;
     }
-
+    
     /**
-     * Get sexo
+     * Set fechaModificado
      *
-     * @return string 
+     * @ORM\PreUpdate
      */
-    public function getSexo()
+    public function setFechaModificado()
     {
-        return $this->sexo;
-    }
-
-    /**
-     * Set cedula
-     *
-     * @param string $cedula
-     * @return Paciente
-     */
-    public function setCedula($cedula)
-    {
-        $this->cedula = $cedula;
+        $this->fechaModificado = new \DateTime();
     
         return $this;
-    }
-
-    /**
-     * Get cedula
-     *
-     * @return string 
-     */
-    public function getCedula()
-    {
-        return $this->cedula;
     }
 }

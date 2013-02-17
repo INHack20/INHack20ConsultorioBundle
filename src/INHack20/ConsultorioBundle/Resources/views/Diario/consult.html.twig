@@ -1,6 +1,6 @@
 {% extends app.request.isXmlHttpRequest ? 'INHack20ConsultorioBundle::layout_ajax.html.twig' :'INHack20ConsultorioBundle::layout.html.twig' %}
 {% block contenido %}
-    <h1 class="t1 center separator-bottom">{{ 'diario.consult' | trans({},'mensajes') }}</h1>
+    <h1 class="t1 center separator-bottom">{{ 'consult' | trans({},'mensajes') }}</h1>
     <div class="center">
         <form action="{{ path('diario_consult') }}" id="inhack20_consultoriobundle_consultype" method="post" {{ form_enctype(form) }}>
             {{ form_widget(form) }}
