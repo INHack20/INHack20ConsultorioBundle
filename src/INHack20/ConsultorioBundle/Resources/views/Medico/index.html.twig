@@ -1,0 +1,8 @@
+{% extends 'INHack20ConsultorioBundle::layout.html.twig' %}
+{% block contenido %}
+    <h1 class="t1 center separator-bottom">Medicos</h1>
+    {% include 'INHack20ConsultorioBundle:Medico:index_content.html.twig' %}
+    <div class="right separator-top">
+            <a href="{{ path('medico_new') }}" class="boton-v">Nuevo</a>
+    </div>
+{% endblock %}

@@ -245,54 +245,13 @@ class DiarioController extends Controller
                         'consultorio' => 'Consultorio',
             );
         $form = $this->createForm(new ConsultType($options));  
-        $entities = NULL;
-        $data = NULL;
+    
         if($request->getMethod() == 'POST' && $request->isXmlHttpRequest()){
-            $form->bindRequest($request);
-            if($form->isValid()){
-                $data = $form->getData();
-                $busqueda = NULL;
-                $criterio = NULL;
-                $fechaDesde = NULL;
-                $fechaHasta = NULL;
-                if($data['busqueda']){
-                    $busqueda = $data['busqueda'];
-                }
-                if($data['criterio']){
-                    $criterio = $data['criterio'];
-                }
-                if($data['fechaDesde']){
-                    $fechaDesde = $data['fechaDesde'];
-                }
-                if($data['fechaHasta']){
-                    $fechaHasta = $data['fechaHasta'];
-                }
-                
-                $qb = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
-                $qb->select('d')->from('INHack20ConsultorioBundle:Diario', 'd');
-                    if($busqueda && $criterio){
-                        $qb->andWhere($qb->expr()->like('d.'.$busqueda,"'%".$criterio."%'"));
-                    }
-                    if($fechaDesde && !$fechaHasta){
-                        $qb->andWhere($qb->expr()->like('d.fechaCreado',"'".$fechaDesde->format('Y-m-d')."%'"));
-                    }
-                    if($fechaDesde && $fechaHasta){
-                        $qb->andWhere('d.fechaCreado >= :fechaCreado');
-                        $qb->andWhere('d.fechaCreado <= :fechaCreado2');
-                        $qb->setParameters(new \Doctrine\Common\Collections\ArrayCollection(array(
-                            new \Doctrine\ORM\Query\Parameter('fechaCreado',$fechaDesde->format('Y-m-d')),
-                            new \Doctrine\ORM\Query\Parameter('fechaCreado2',$fechaHasta->format('Y-m-d').' 23:59:59'),
-                        )));
-                    }
-                    //echo $qb->getQuery()->getSQL();
-                    //echo $fechaDesde->format('Y-m-d');
-                    $entities = $qb->getQuery()->getResult();
-                var_dump($data);
-            }
-            return $this->render('INHack20ConsultorioBundle:Diario:index_content.html.twig',array(
-                'entities' => $entities,
-                'data' => $data,
-            ));
+            $class = "INHack20ConsultorioBundle:Diario";
+            $view = 'INHack20ConsultorioBundle:Diario:index_content.html.twig';
+            
+            return $this->getSearchResult($options, $class, $view);
+            
         }
         
         return array(
@@ -303,7 +262,6 @@ class DiarioController extends Controller
     /**
      * Exporta los resultados de un filtro a un archivo pdf
      * @Route("/exportPDF", name="diario_export_diario")
-     * @Template
      */
     public function exportPDFAction(){
         
@@ -324,57 +282,133 @@ class DiarioController extends Controller
         
         $pdf->AddPage();
         
-$html = '
-<table style="width: 100%;" border="0" cellpadding="2" cellspacing="2">
-        <tbody>
+        $options = array('medico' => 'Médico',
+                        'municipio' => 'Municipio',
+                        'asic' => 'Asic',
+                        'consultorio' => 'Consultorio',
+            );
+        
+        $data = $this->getRequest()->query->all();
+        
+        $class = "INHack20ConsultorioBundle:Diario";
+        $view = 'INHack20ConsultorioBundle:Diario:index_content.html.twig';
+        $entities = $this->getSearchResult($options, $class, $view, true,$data);
+        
+$html ='<table border="1" style="width: 100%; text-align:center; ">
+        <tr>
+            <th style="width: 4%;">Nº</th>
+            <th style="width: 25%;">MEDICO</th>
+            <th style="width: 20%;">MUNICIPIO</th>
+            <th style="width: 20%;">ASIC</th>
+            <th style="width: 15%;">CONSULTORIO</th>
+            <th style="width: 15%;">FECHA</th>
+        </tr>';
+if($entities){
+    $i = 1;
+    foreach ($entities as $entity) {
+        $html.='
+                <tr>
+                    <td>'.$i.'</td>
+                    <td>'.$entity->getMedico().'</td>
+                    <td>'.$entity->getMunicipio().'</td>
+                    <td>'.$entity->getAsic().'</td>
+                    <td>'.$entity->getConsultorio().'</td>
+                    <td>'.$entity->getFechaCreado()->format('Y-m-d').'</td>
+                </tr>
+             ';
+        $i++;
+    }
+}else{
+     $html.='
             <tr>
-                <td>'.$translator->trans('title.estado',array(),'pdf').':estado</td>
-                <td>'.$translator->trans('title.nombreMedico',array(),'pdf').':nombreMedico</td>
-                <td>'.$translator->trans('title.fecha',array(),'pdf').':fecha</td>
+                <td colspan="6">No se encontraron resultados</td>
             </tr>
-            <tr>
-                <td>'.$translator->trans('title.municipio',array(),'pdf').':municipio</td>
-                <td>'.$translator->trans('title.asic',array(),'pdf').':asic</td>
-                <td>'.$translator->trans('title.consultorio',array(),'pdf').':consultorio</td>
-            </tr>
-        </tbody>
+         ';
+}
+$html.='
 </table>
 ';
 
-// print a block of text using Write()
-//$pdf->Write($h=0, $txt, $link='', $fill=0, $align='J', $ln=true, $stretch=0, $firstline=false, $firstblock=false, $maxh=0);
-$pdf->writeHTML($html, true, false, true, false, '');
-
-$html = '
-    
-    <table style="width: 100%; text-align:center; " border="1" cellpadding="0" cellspacing="0">
-        <tr>
-            <th style="width: 4%;">Nº</th>
-            <th style="width: 8%;">CEDULA</th>
-            <th style="width: 17%;">NOMBRES Y APELLIDOS</th>
-            <th style="width: 4%;">E</th>
-            <th style="width: 4%;">S</th>
-            <th style="width: 20%;">DIRECCIÓN</th>
-            <th style="width: 4%;">T</th>
-            <th style="width: 20%;">DAGNÓSTICO</th>
-            <th style="width: 20%;">TRATAMIENTO</th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>19108122</td>
-            <td>Carlos Mendoza</td>
-            <td>E</td>
-            <td>S</td>
-            <td>DIRECCIÓN</td>
-            <td>CN</td>
-            <td>DAGNÓSTICODAGNÓSTICODAGNÓSTICODAGNÓSTICO</td>
-            <td>TRATAMIENTO</td>
-        </tr>
-    </table>
-';
 $pdf->SetFont('helvetica', '', 9);
 $pdf->writeHTML($html, true, false, true, false, '');
+
        return new \Symfony\Component\HttpFoundation\Response($pdf->Output('example_006.pdf', 'I'),
                 200,array('Content-Type' => 'application/pdf'));
     }
+    
+    /**
+     * 
+     * @param array() $options
+     * @param string $class
+     * @param string $view
+     * @return viewHtml
+     */
+    private function getSearchResult($options,$class,$view,$returnEntity = false,$data = NULL ){
+        $request = $this->getRequest();
+        
+        $form = $this->createForm(new ConsultType($options));  
+        $entities = NULL;
+        
+            $form->bindRequest($request);
+            if($form->isValid() || $data){
+                if(!$data){
+                    $data = $form->getData();
+                    }
+                    else{
+                        $data = $data['data'];
+                    }
+                $busqueda = NULL;
+                $criterio = NULL;
+                $fechaDesde = NULL;
+                $fechaHasta = NULL;
+                
+                if(isset($data['busqueda'])){
+                    $busqueda = $data['busqueda'];
+                }
+                if(isset($data['criterio'])){
+                    $criterio = $data['criterio'];
+                }
+                if($data['fechaDesde']){
+                    $fechaDesde = $data['fechaDesde'];
+                    if(is_object($fechaDesde))
+                         $fechaDesde = $fechaDesde->format('Y-m-d');
+                    $data['fechaDesde'] = $fechaDesde;
+                }
+                if(isset($data['fechaHasta'])){
+                    $fechaHasta = $data['fechaHasta'];
+                    if(is_object($fechaHasta))
+                        $fechaHasta = $fechaHasta->format('Y-m-d');
+                    $data['fechaHasta'] = $fechaHasta;
+                }
+                
+                $qb = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
+                $qb->select('d')->from($class, 'd');
+                    if($busqueda && $criterio){
+                        $qb->andWhere($qb->expr()->like('d.'.$busqueda,"'%".$criterio."%'"));
+                    }
+                    if($fechaDesde && !$fechaHasta){
+                        $qb->andWhere($qb->expr()->like('d.fechaCreado',"'".$fechaDesde."%'"));
+                    }
+                    if($fechaDesde && $fechaHasta){
+                        $qb->andWhere('d.fechaCreado >= :fechaCreado');
+                        $qb->andWhere('d.fechaCreado <= :fechaCreado2');
+                        $qb->setParameters(new \Doctrine\Common\Collections\ArrayCollection(array(
+                            new \Doctrine\ORM\Query\Parameter('fechaCreado',$fechaDesde),
+                            new \Doctrine\ORM\Query\Parameter('fechaCreado2',$fechaHasta.' 23:59:59'),
+                        )));
+                    }
+                   //echo $qb->getQuery()->getSQL();die;
+                    $entities = $qb->getQuery()->getResult();
+            }
+            if($returnEntity){
+                return $entities;
+            }
+            else{
+                return $this->render($view,array(
+                    'entities' => $entities,
+                    'data' => $data,
+                ));
+            }
+    }
+
 }

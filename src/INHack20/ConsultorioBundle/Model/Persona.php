@@ -26,7 +26,7 @@ abstract class Persona {
     protected $edad;
     
     /**
-     * @ORM\Column(name="sexo", type="string", length=5)
+     * @ORM\Column(name="sexo", type="string", length=1)
      */
     protected $sexo;
     

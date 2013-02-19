@@ -1,4 +1,3 @@
-<div class="center">
     <table class="records_list tabla-1">
         <thead>
             <tr>
@@ -8,7 +7,7 @@
                 <th>Sexo</th>
                 <th>Diagnostico</th>
                 <th>Tratamiento</th>
-                <th>Fechacreado</th>
+                <th>Creado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -42,4 +41,7 @@
         {% endfor %}
         </tbody>
     </table>
-</div>
+<br/>
+{% if data is defined %}
+    <a href="{{ path('paciente_exportPDF',{ 'data' : data }) }}" class="boton-v separator-top">Exportar</a>   
+{% endif %}

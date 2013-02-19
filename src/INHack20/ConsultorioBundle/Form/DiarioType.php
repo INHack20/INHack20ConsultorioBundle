@@ -11,8 +11,11 @@ class DiarioType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('medico',null,array(
+            ->add('medico','entity',array(
                 'label' => 'Médico',
+                'class' => 'INHack20\\ConsultorioBundle\\Entity\\Medico',
+                //'property' => 'nombre',
+                'empty_value' => '.: Seleccione :.'
             ))
             ->add('municipio')
             ->add('asic')

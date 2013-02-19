@@ -1,0 +1,17 @@
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: INHack20\UserBundle\Entity\User
+    
+    from_email:
+        address:        inhack20@gmail.com
+        sender_name:    Ing. Carlos Mendoza
+        
+    resetting:
+        email:
+            from_email:
+                address:        inhack20@gmail.com
+                sender_name:    Ing. Carlos Mendoza
+                
+parameters:
+    fos_user.template.theme: ~

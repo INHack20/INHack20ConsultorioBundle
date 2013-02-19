@@ -26,7 +26,7 @@
             <ul>
                     <li class="current"><a href="{{ path('paciente_findtoday') }}">Hoy</a></li>
                     <li class="current"><a href="{{ path('paciente_new') }}">Nuevo</a></li>
-                    <li class="current"><a href="{{ path('paciente_new') }}">Consulta</a></li>
+                    <li class="current"><a href="{{ path('paciente_consult') }}">Consulta</a></li>
             </ul>
     </li>
     <li>
@@ -40,6 +40,13 @@
                             <li><a href="{{ path('fos_user_change_password') }}">Cambiar Contrase&ntilde;a</a></li>
                             <li><a href="{{ path('fos_user_registration_register') }}">Registrar Usuario</a></li>
                             <li><a href="{{ path('fos_user_lista_usuarios') }}">Administrar Usuario</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#ab">Medico</a>
+                        <ul>
+                            <li><a href="{{ path('medico') }}">Lista</a></li>
+                            <li><a href="{{ path('medico_new') }}">Nuevo</a></li>
                         </ul>
                     </li>
 

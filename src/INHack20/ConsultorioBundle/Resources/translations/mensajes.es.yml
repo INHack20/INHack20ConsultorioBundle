@@ -4,7 +4,8 @@ diario:
     titulo: Diario
   index:
     new: Abrir
-consult: Consulta
+consultPaciente: Consulta de Pacientes
+consultDiario: Consulta de Diarios
 search: Buscar
 mensaje:
   tipo:

@@ -3,15 +3,17 @@
 namespace INHack20\ConsultorioBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use INHack20\ConsultorioBundle\Model\Persona as BasePersona;
+use Doctrine\Common\Collections\ArrayCollection;
+use INHack20\ConsultorioBundle\Model\Persona;
+
 /**
- * Paciente
+ * Medico
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="INHack20\ConsultorioBundle\Repository\PacienteRepository")
+ * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
  */
-class Paciente extends BasePersona
+class Medico extends Persona
 {
     /**
      * @var integer
@@ -21,34 +23,37 @@ class Paciente extends BasePersona
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="diagnostico", type="text")
+     * @ORM\Column(name="turno", type="string", length=10)
      */
-    private $diagnostico;
+    private $turno;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="tratamiento", type="text")
+     * @ORM\Column(name="especialidad", type="string", length=50)
      */
-    private $tratamiento;
+    private $especialidad;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Diario",inversedBy="pacientes")
-     * @ORM\JoinColumn(name="diario_id",referencedColumnName="id")
-     * @var Diario 
+     * @var string
+     *
+     * @ORM\Column(name="telefono", type="string", length=30)
      */
-    protected $diario;
+    private $telefono;
     
     /**
-     * @var string
-     * @ORM\ManyToOne(targetEntity="TipoConsulta",inversedBy="pacientes")
-     * @ORM\JoinColumn(name="tipoConsulta_id",referencedColumnName="id")
+     * @var Diario
+     * @ORM\OneToMany(targetEntity="Diario",mappedBy="medico")
      */
-    protected $tipoConsulta;
+    protected $diarios;
+
+    public function __construct() {
+        $this->diarios = new ArrayCollection();
+    }
     
     /**
      * Get id
@@ -61,100 +66,79 @@ class Paciente extends BasePersona
     }
 
     /**
-     * Set diagnostico
+     * Set turno
      *
-     * @param string $diagnostico
-     * @return Paciente
+     * @param integer $turno
+     * @return Medico
      */
-    public function setDiagnostico($diagnostico)
+    public function setTurno($turno)
     {
-        $this->diagnostico = $diagnostico;
+        $this->turno = $turno;
     
         return $this;
     }
 
     /**
-     * Get diagnostico
+     * Get turno
+     *
+     * @return integer 
+     */
+    public function getTurno()
+    {
+        return $this->turno;
+    }
+
+    /**
+     * Set especialidad
+     *
+     * @param string $especialidad
+     * @return Medico
+     */
+    public function setEspecialidad($especialidad)
+    {
+        $this->especialidad = $especialidad;
+    
+        return $this;
+    }
+
+    /**
+     * Get especialidad
      *
      * @return string 
      */
-    public function getDiagnostico()
+    public function getEspecialidad()
     {
-        return $this->diagnostico;
+        return $this->especialidad;
     }
 
     /**
-     * Set tratamiento
+     * Set telefono
      *
-     * @param string $tratamiento
-     * @return Paciente
+     * @param string $telefono
+     * @return Medico
      */
-    public function setTratamiento($tratamiento)
+    public function setTelefono($telefono)
     {
-        $this->tratamiento = $tratamiento;
+        $this->telefono = $telefono;
     
         return $this;
     }
 
     /**
-     * Get tratamiento
+     * Get telefono
      *
      * @return string 
      */
-    public function getTratamiento()
+    public function getTelefono()
     {
-        return $this->tratamiento;
-    }
-
-    /**
-     * Set diario
-     *
-     * @param \INHack20\ConsultorioBundle\Entity\Diario $diario
-     * @return Paciente
-     */
-    public function setDiario(\INHack20\ConsultorioBundle\Entity\Diario $diario = null)
-    {
-        $this->diario = $diario;
-    
-        return $this;
-    }
-
-    /**
-     * Get diario
-     *
-     * @return \INHack20\ConsultorioBundle\Entity\Diario 
-     */
-    public function getDiario()
-    {
-        return $this->diario;
-    }
-
-    /**
-     * Set tipoConsulta
-     *
-     * @param \INHack20\ConsultorioBundle\Entity\TipoConsulta $tipoConsulta
-     * @return Paciente
-     */
-    public function setTipoConsulta(\INHack20\ConsultorioBundle\Entity\TipoConsulta $tipoConsulta = null)
-    {
-        $this->tipoConsulta = $tipoConsulta;
-    
-        return $this;
-    }
-
-    /**
-     * Get tipoConsulta
-     *
-     * @return \INHack20\ConsultorioBundle\Entity\TipoConsulta 
-     */
-    public function getTipoConsulta()
-    {
-        return $this->tipoConsulta;
+        return $this->telefono;
     }
     
     /**
      * Set fechaCreado
      *
+     * @param \DateTime $fechaCreado
+     * @return Diario
      * @ORM\PrePersist
      */
     public function setFechaCreado()
@@ -163,10 +147,12 @@ class Paciente extends BasePersona
     
         return $this;
     }
-    
+
     /**
      * Set fechaModificado
      *
+     * @param \DateTime $fechaModificado
+     * @return Diario
      * @ORM\PreUpdate
      */
     public function setFechaModificado()
@@ -180,7 +166,7 @@ class Paciente extends BasePersona
      * Set cedula
      *
      * @param integer $cedula
-     * @return Paciente
+     * @return Medico
      */
     public function setCedula($cedula)
     {
@@ -203,7 +189,7 @@ class Paciente extends BasePersona
      * Set nombreCompleto
      *
      * @param string $nombreCompleto
-     * @return Paciente
+     * @return Medico
      */
     public function setNombreCompleto($nombreCompleto)
     {
@@ -226,7 +212,7 @@ class Paciente extends BasePersona
      * Set edad
      *
      * @param integer $edad
-     * @return Paciente
+     * @return Medico
      */
     public function setEdad($edad)
     {
@@ -249,7 +235,7 @@ class Paciente extends BasePersona
      * Set sexo
      *
      * @param string $sexo
-     * @return Paciente
+     * @return Medico
      */
     public function setSexo($sexo)
     {
@@ -287,4 +273,42 @@ class Paciente extends BasePersona
     {
         return $this->fechaModificado;
     }
+
+    /**
+     * Add diarios
+     *
+     * @param \INHack20\ConsultorioBundle\Entity\Diario $diarios
+     * @return Medico
+     */
+    public function addDiario(\INHack20\ConsultorioBundle\Entity\Diario $diarios)
+    {
+        $this->diarios[] = $diarios;
+    
+        return $this;
+    }
+
+    /**
+     * Remove diarios
+     *
+     * @param \INHack20\ConsultorioBundle\Entity\Diario $diarios
+     */
+    public function removeDiario(\INHack20\ConsultorioBundle\Entity\Diario $diarios)
+    {
+        $this->diarios->removeElement($diarios);
+    }
+
+    /**
+     * Get diarios
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDiarios()
+    {
+        return $this->diarios;
+    }
+    
+    public function __toString() {
+        return $this->nombreCompleto .'['.$this->especialidad.']';
+    }
+
 }

@@ -27,13 +27,6 @@ class Diario
     /**
      * @var string
      *
-     * @ORM\Column(name="medico", type="string", length=100)
-     */
-    private $medico;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="municipio", type="string", length=100)
      */
     private $municipio;
@@ -65,7 +58,15 @@ class Diario
      * @ORM\Column(name="fechaModificado", type="datetime", nullable=true)
      */
     private $fechaModificado;
-
+    
+    /**
+     * @var Medico
+     *
+     * @ORM\ManyToOne(targetEntity="Medico",inversedBy="diarios")
+     * @ORM\JoinColumn(name="medico_id",referencedColumnName="id")
+     */
+    protected $medico;
+    
     /**
      * @ORM\OneToMany(targetEntity="Paciente",mappedBy="diario")
      * @var ArrayCollection(Pacientes)
@@ -85,30 +86,7 @@ class Diario
     {
         return $this->id;
     }
-
-    /**
-     * Set medico
-     *
-     * @param string $medico
-     * @return Diario
-     */
-    public function setMedico($medico)
-    {
-        $this->medico = $medico;
     
-        return $this;
-    }
-
-    /**
-     * Get medico
-     *
-     * @return string 
-     */
-    public function getMedico()
-    {
-        return $this->medico;
-    }
-
     /**
      * Set municipio
      *
@@ -263,5 +241,28 @@ class Diario
     public function getDetalle()
     {
         return $this->getMedico() . '['.$this->getConsultorio().']';
+    }
+
+    /**
+     * Set medico
+     *
+     * @param \INHack20\ConsultorioBundle\Entity\Medico $medico
+     * @return Diario
+     */
+    public function setMedico(\INHack20\ConsultorioBundle\Entity\Medico $medico = null)
+    {
+        $this->medico = $medico;
+    
+        return $this;
+    }
+
+    /**
+     * Get medico
+     *
+     * @return \INHack20\ConsultorioBundle\Entity\Medico 
+     */
+    public function getMedico()
+    {
+        return $this->medico;
     }
 }

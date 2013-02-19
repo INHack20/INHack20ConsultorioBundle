@@ -27,6 +27,13 @@ class ConsultType  extends AbstractType{
                 'label' => 'Descripción',
                 'required' => false,
             ))
+            ->add('medico','entity',array(
+                'label' => 'Médico',
+                'class' => 'INHack20\\ConsultorioBundle\\Entity\\Medico',
+                //'property' => 'nombre',
+                'empty_value' => '.: Seleccione :.',
+                'required' => false,
+            ))
             ->add('fechaDesde','datetime',array(
                 'label' => 'Desde',
                 'required' => false,
