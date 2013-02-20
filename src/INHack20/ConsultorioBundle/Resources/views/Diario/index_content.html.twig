@@ -20,7 +20,6 @@
                 <td>{{ entity.asic }}</td>
                 <td>{{ entity.consultorio }}</td>
                 <td>{% if entity.fechaCreado %}{{ entity.fechaCreado|date('d/m/Y g:i a') }}{% endif %}</td>
-                
                 <td>
                     <ul class="acciones">
                         <li>
@@ -28,6 +27,9 @@
                         </li>
                         <li>
                             <a href="{{ path('diario_edit', { 'id': entity.id }) }}">editar</a>
+                        </li>
+                        <li>
+                           <a href="{{ path('diario_exportPDF', { 'id': entity.id }) }}" target="_blank">exportar</a>
                         </li>
                     </ul>
                 </td>
@@ -44,5 +46,5 @@
 <br/>
 
 {% if data is defined %}
-    <a href="{{ path('diario_export_diario',{ 'data' : data }) }}" class="boton-v separator-top">Exportar</a>   
+   <a href="{{ path('diario_export_search',{ 'data' : data }) }}" target="_blank" class="boton-v separator-top">Exportar</a>   
 {% endif %}

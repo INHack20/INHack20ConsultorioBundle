@@ -11,6 +11,7 @@ use INHack20\ConsultorioBundle\Entity\Paciente;
 use INHack20\ConsultorioBundle\Form\PacienteType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use INHack20\ConsultorioBundle\Form\ConsultType;
+use INHack20\ConsultorioBundle\Model\Search;
 
 /**
  * Paciente controller.
@@ -19,6 +20,13 @@ use INHack20\ConsultorioBundle\Form\ConsultType;
  */
 class PacienteController extends Controller
 {
+   private $options = array(
+                        'diagnostico' => 'Diagnostico',
+                        'tratamiento' => 'Tratamiento',
+                        'cedula' => 'Cedula',
+                        'nombreCompleto' => 'Nombre Completo',
+            );
+   
     /**
      * Lists all Paciente entities.
      *
@@ -260,20 +268,16 @@ class PacienteController extends Controller
      */
     public function consultAction(){
         $request = $this->getRequest();
-        $options = array(
-                        'diagnostico' => 'Diagnostico',
-                        'tratamiento' => 'Tratamiento',
-                        'cedula' => 'Cedula',
-                        'nombreCompleto' => 'Nombre Completo',
-            );
-        $form = $this->createForm(new ConsultType($options));  
+        
+        $form = $this->createForm(new ConsultType($this->options,true));  
     
         if($request->getMethod() == 'POST' && $request->isXmlHttpRequest()){
             $class = "INHack20ConsultorioBundle:Paciente";
             $view = 'INHack20ConsultorioBundle:Paciente:index_content.html.twig';
-            
-            return $this->getSearchResult($options, $class, $view);
-            
+            $form->bindRequest($request);
+            $qb = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
+            $param = Search::getSearchResult($this->options, $class, $view, $qb, false, $form->getData());
+            return $this->render($view,$param);
         }
         
         return array(
@@ -291,6 +295,14 @@ class PacienteController extends Controller
         $pdf= $this->get('white_october.tcpdf')->create();
         $translator = $this->get('translator');
         
+        $data = $this->getRequest()->query->all();
+        $class = "INHack20ConsultorioBundle:Paciente";
+        $view = 'INHack20ConsultorioBundle:Paciente:index_content.html.twig';
+        $qb = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
+        $entities = Search::getSearchResult($this->options, $class, $view, $qb, true, $data);
+        
+        $logo = $this->get('templating.helper.assets')->getUrl('/bundles/inhack20consultorio/images/logo_barrio.jpg');
+        
         // set document information
         $pdf->SetCreator('Symfony2 PDF');
         $pdf->SetAuthor('Barrio Adentro I');
@@ -298,6 +310,8 @@ class PacienteController extends Controller
         $pdf->SetSubject('Barrio Adentro I');
         $pdf->SetKeywords('Barrio Adentro');
         $pdf->setTranslator($translator);
+        $pdf->setTitulo($translator->trans('header.4',array(),'pdf'));
+        $pdf->setLogo($logo);
         //set margins
         $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP + 15, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -357,82 +371,5 @@ $pdf->writeHTML($html, true, false, true, false, '');
                 200,array('Content-Type' => 'application/pdf'));
     }
     
-    /**
-     * 
-     * @param array() $options
-     * @param string $class
-     * @param string $view
-     * @return viewHtml
-     */
-    private function getSearchResult($options,$class,$view,$returnEntity = false,$data = NULL ){
-        $request = $this->getRequest();
-        
-        $form = $this->createForm(new ConsultType($options));  
-        $entities = NULL;
-        
-            $form->bindRequest($request);
-            if($form->isValid() || $data){
-                if(!$data){
-                    $data = $form->getData();
-                    }
-                    else{
-                        $data = $data['data'];
-                    }
-                $medico = NULL;
-                $busqueda = NULL;
-                $criterio = NULL;
-                $fechaDesde = NULL;
-                $fechaHasta = NULL;
-                if(isset($data['medico'])){
-                    $medico = $data['medico'];
-                }
-                if(isset($data['busqueda'])){
-                    $busqueda = $data['busqueda'];
-                }
-                if(isset($data['criterio'])){
-                    $criterio = $data['criterio'];
-                }
-                if($data['fechaDesde']){
-                    $fechaDesde = $data['fechaDesde'];
-                    if(is_object($fechaDesde))
-                         $fechaDesde = $fechaDesde->format('Y-m-d');
-                    $data['fechaDesde'] = $fechaDesde;
-                }
-                if(isset($data['fechaHasta'])){
-                    $fechaHasta = $data['fechaHasta'];
-                    if(is_object($fechaHasta))
-                        $fechaHasta = $fechaHasta->format('Y-m-d');
-                    $data['fechaHasta'] = $fechaHasta;
-                }
-                
-                $qb = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
-                $qb->select('d')->from($class, 'd');
-                    
-                    if($busqueda && $criterio){
-                        $qb->andWhere($qb->expr()->like('d.'.$busqueda,"'%".$criterio."%'"));
-                    }
-                    if($fechaDesde && !$fechaHasta){
-                        $qb->andWhere($qb->expr()->like('d.fechaCreado',"'".$fechaDesde."%'"));
-                    }
-                    if($fechaDesde && $fechaHasta){
-                        $qb->andWhere('d.fechaCreado >= :fechaCreado');
-                        $qb->andWhere('d.fechaCreado <= :fechaCreado2');
-                        $qb->setParameters(new \Doctrine\Common\Collections\ArrayCollection(array(
-                            new \Doctrine\ORM\Query\Parameter('fechaCreado',$fechaDesde),
-                            new \Doctrine\ORM\Query\Parameter('fechaCreado2',$fechaHasta.' 23:59:59'),
-                        )));
-                    }
-                   //echo $qb->getQuery()->getSQL();die;
-                    $entities = $qb->getQuery()->getResult();
-            }
-            if($returnEntity){
-                return $entities;
-            }
-            else{
-                return $this->render($view,array(
-                    'entities' => $entities,
-                    'data' => $data,
-                ));
-            }
-    }
+    
 }

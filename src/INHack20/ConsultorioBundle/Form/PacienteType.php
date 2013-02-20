@@ -18,7 +18,7 @@ class PacienteType extends AbstractType
             ->add('cedula')
             ->add('edad')
             ->add('sexo','choice',array(
-                'choices' => array('m' => 'Masculino', 'f' => 'Femenino'),
+                'choices' => array('M' => 'Masculino', 'F' => 'Femenino'),
                 'empty_value' => '.: Seleccione :.',
             ))
             ->add('tipoConsulta','entity',array(

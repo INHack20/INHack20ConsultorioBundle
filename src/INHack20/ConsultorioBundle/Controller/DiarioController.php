@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use INHack20\ConsultorioBundle\Entity\Diario;
 use INHack20\ConsultorioBundle\Form\DiarioType;
 use INHack20\ConsultorioBundle\Form\ConsultType;
+use INHack20\ConsultorioBundle\Model\Search;
 
 /**
  * Diario controller.
@@ -18,6 +19,11 @@ use INHack20\ConsultorioBundle\Form\ConsultType;
  */
 class DiarioController extends Controller
 {
+   private $options = array('municipio' => 'Municipio',
+                        'asic' => 'Asic',
+                        'consultorio' => 'Consultorio',
+            );
+   
     /**
      * Lists all Diario entities.
      *
@@ -239,35 +245,33 @@ class DiarioController extends Controller
      */
     public function consultAction(){
         $request = $this->getRequest();
-        $options = array('medico' => 'Médico',
-                        'municipio' => 'Municipio',
-                        'asic' => 'Asic',
-                        'consultorio' => 'Consultorio',
-            );
-        $form = $this->createForm(new ConsultType($options));  
+      
+        $form = $this->createForm(new ConsultType($this->options));  
     
         if($request->getMethod() == 'POST' && $request->isXmlHttpRequest()){
             $class = "INHack20ConsultorioBundle:Diario";
             $view = 'INHack20ConsultorioBundle:Diario:index_content.html.twig';
-            
-            return $this->getSearchResult($options, $class, $view);
-            
+            $form->bindRequest($request);
+            $qb = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
+            $param = Search::getSearchResult($this->options, $class, $view, $qb, false, $form->getData());
+            return $this->render($view,$param);
         }
         
         return array(
             'form' => $form->createView(),
         );
     }
-    
+
     /**
      * Exporta los resultados de un filtro a un archivo pdf
-     * @Route("/exportPDF", name="diario_export_diario")
+     * @Route("/exportSearchPDF", name="diario_export_search")
      */
-    public function exportPDFAction(){
+    public function exportSearchPDFAction(){
         
         $pdf= $this->get('white_october.tcpdf')->create();
         $translator = $this->get('translator');
-        
+       
+        $logo = $this->get('templating.helper.assets')->getUrl('bundles/inhack20consultorio/images/logo_barrio.jpg');
         // set document information
         $pdf->SetCreator('Symfony2 PDF');
         $pdf->SetAuthor('Barrio Adentro I');
@@ -275,6 +279,8 @@ class DiarioController extends Controller
         $pdf->SetSubject('Barrio Adentro I');
         $pdf->SetKeywords('Barrio Adentro');
         $pdf->setTranslator($translator);
+        $pdf->setTitulo($translator->trans('header.5',array(),'pdf'));
+        $pdf->setLogo($logo);
         //set margins
         $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP + 15, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -282,17 +288,11 @@ class DiarioController extends Controller
         
         $pdf->AddPage();
         
-        $options = array('medico' => 'Médico',
-                        'municipio' => 'Municipio',
-                        'asic' => 'Asic',
-                        'consultorio' => 'Consultorio',
-            );
-        
         $data = $this->getRequest()->query->all();
-        
         $class = "INHack20ConsultorioBundle:Diario";
         $view = 'INHack20ConsultorioBundle:Diario:index_content.html.twig';
-        $entities = $this->getSearchResult($options, $class, $view, true,$data);
+        $qb = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
+        $entities = Search::getSearchResult($this->options, $class, $view, $qb, true, $data);
         
 $html ='<table border="1" style="width: 100%; text-align:center; ">
         <tr>
@@ -335,80 +335,105 @@ $pdf->writeHTML($html, true, false, true, false, '');
        return new \Symfony\Component\HttpFoundation\Response($pdf->Output('example_006.pdf', 'I'),
                 200,array('Content-Type' => 'application/pdf'));
     }
-    
-    /**
-     * 
-     * @param array() $options
-     * @param string $class
-     * @param string $view
-     * @return viewHtml
-     */
-    private function getSearchResult($options,$class,$view,$returnEntity = false,$data = NULL ){
-        $request = $this->getRequest();
-        
-        $form = $this->createForm(new ConsultType($options));  
-        $entities = NULL;
-        
-            $form->bindRequest($request);
-            if($form->isValid() || $data){
-                if(!$data){
-                    $data = $form->getData();
-                    }
-                    else{
-                        $data = $data['data'];
-                    }
-                $busqueda = NULL;
-                $criterio = NULL;
-                $fechaDesde = NULL;
-                $fechaHasta = NULL;
-                
-                if(isset($data['busqueda'])){
-                    $busqueda = $data['busqueda'];
-                }
-                if(isset($data['criterio'])){
-                    $criterio = $data['criterio'];
-                }
-                if($data['fechaDesde']){
-                    $fechaDesde = $data['fechaDesde'];
-                    if(is_object($fechaDesde))
-                         $fechaDesde = $fechaDesde->format('Y-m-d');
-                    $data['fechaDesde'] = $fechaDesde;
-                }
-                if(isset($data['fechaHasta'])){
-                    $fechaHasta = $data['fechaHasta'];
-                    if(is_object($fechaHasta))
-                        $fechaHasta = $fechaHasta->format('Y-m-d');
-                    $data['fechaHasta'] = $fechaHasta;
-                }
-                
-                $qb = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
-                $qb->select('d')->from($class, 'd');
-                    if($busqueda && $criterio){
-                        $qb->andWhere($qb->expr()->like('d.'.$busqueda,"'%".$criterio."%'"));
-                    }
-                    if($fechaDesde && !$fechaHasta){
-                        $qb->andWhere($qb->expr()->like('d.fechaCreado',"'".$fechaDesde."%'"));
-                    }
-                    if($fechaDesde && $fechaHasta){
-                        $qb->andWhere('d.fechaCreado >= :fechaCreado');
-                        $qb->andWhere('d.fechaCreado <= :fechaCreado2');
-                        $qb->setParameters(new \Doctrine\Common\Collections\ArrayCollection(array(
-                            new \Doctrine\ORM\Query\Parameter('fechaCreado',$fechaDesde),
-                            new \Doctrine\ORM\Query\Parameter('fechaCreado2',$fechaHasta.' 23:59:59'),
-                        )));
-                    }
-                   //echo $qb->getQuery()->getSQL();die;
-                    $entities = $qb->getQuery()->getResult();
-            }
-            if($returnEntity){
-                return $entities;
-            }
-            else{
-                return $this->render($view,array(
-                    'entities' => $entities,
-                    'data' => $data,
-                ));
-            }
-    }
 
+    /**
+     * Exporta los resultados de un filtro a un archivo pdf
+     * @Route("/{id}/exportPDF", name="diario_exportPDF")
+     */
+    public function exportPDFAction($id){
+        
+       $em = $this->getDoctrine()->getManager();
+
+       $entity = $em->getRepository('INHack20ConsultorioBundle:Diario')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Diario entity.');
+        }
+       
+        $pdf= $this->get('white_october.tcpdf')->create();
+        $logo = $this->get('templating.helper.assets')->getUrl('/bundles/inhack20consultorio/images/logo_barrio.jpg');
+        $translator = $this->get('translator');
+        
+        // set document information
+        $pdf->SetCreator('Symfony2 PDF');
+        $pdf->SetAuthor('Barrio Adentro I');
+        $pdf->SetTitle('Reporte');
+        $pdf->SetSubject('Barrio Adentro I');
+        $pdf->SetKeywords('Barrio Adentro');
+        $pdf->setTranslator($translator);
+        $pdf->setTitulo($translator->trans('header.4',array(),'pdf'));
+        $pdf->setLogo($logo);
+        $pdf->setResume(true);
+        //set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP + 15, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        $pdf->AddPage();
+        
+$html = '
+    <table style="width: 100%;" border="0" cellpadding="2" cellspacing="2">
+            <tbody>
+                <tr>
+                    <td>'.$translator->trans('title.estado',array(),'pdf').':estado</td>
+                    <td>'.$translator->trans('title.nombreMedico',array(),'pdf').':'.$entity->getMedico()->getNombreCompleto().'</td>
+                    <td>'.$translator->trans('title.fecha',array(),'pdf').':'.$entity->getFechaCreado()->format('Y-m-d').'</td>
+                </tr>
+                <tr>
+                    <td>'.$translator->trans('title.municipio',array(),'pdf').':'.$entity->getMunicipio().'</td>
+                    <td>'.$translator->trans('title.asic',array(),'pdf').':'.$entity->getAsic().'</td>
+                    <td>'.$translator->trans('title.consultorio',array(),'pdf').':'.$entity->getConsultorio().'</td>
+                </tr>
+            </tbody>
+    </table>
+';
+
+$pdf->writeHTML($html, true, false, true, false, '');
+
+$html = '
+    <table style="width: 100%; text-align:center; " border="1" cellpadding="0" cellspacing="0">
+        <tr>
+            <th style="width: 4%;">Nº</th>
+            <th style="width: 8%;">CEDULA</th>
+            <th style="width: 17%;">NOMBRES Y APELLIDOS</th>
+            <th style="width: 4%;">E</th>
+            <th style="width: 4%;">S</th>
+            <th style="width: 20%;">DIRECCIÓN</th>
+            <th style="width: 4%;">T</th>
+            <th style="width: 20%;">DAGNÓSTICO</th>
+            <th style="width: 20%;">TRATAMIENTO</th>
+        </tr>';
+$pacientes = $entity->getPacientes();
+if($pacientes){
+   $i=0;
+   foreach ($pacientes as $paciente){
+   $html.='<tr>
+            <td>'.($i + 1 ).'</td>
+            <td>'.$paciente->getCedula().'</td>
+            <td>'.$paciente->getNombreCompleto().'</td>
+            <td>'.$paciente->getEdad().'</td>
+            <td>'.$paciente->getSexo().'</td>
+            <td></td>
+            <td>'.$paciente->getTipoConsulta()->getAcronimo().'</td>
+            <td>'.$paciente->getDiagnostico().'</td>
+            <td>'.$paciente->getTratamiento().'</td>
+        </tr>';
+        $i++;
+   }//fin foreach
+   $pdf->setTotal($i);
+}
+else{
+   $html.='<tr>
+            <td colspan="9">No se encontraron resultados.</td>
+        </tr>';
+}
+$html.='
+    </table>
+';
+$pdf->SetFont('helvetica', '', 9);
+$pdf->writeHTML($html, true, false, true, false, '');
+    
+    return new \Symfony\Component\HttpFoundation\Response($pdf->Output('example_006.pdf', 'I'),
+                200,array('Content-Type' => 'application/pdf'));
+    }
+    
 }

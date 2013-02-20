@@ -66,3 +66,4 @@ white_october_tcpdf:
     class: "INHack20\ConsultorioBundle\TCPDF\ReportePDF"
     tcpdf:
       k_tcpdf_external_config: false
+      k_path_images: "\Roort"

@@ -9,9 +9,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class ConsultType  extends AbstractType{
     
     private $option;
-
-    public function __construct($option){
+    private $tipoConsulta;
+    public function __construct($option, $tipoConsulta = false){
         $this->option = $option;
+        $this->tipoConsulta = $tipoConsulta;
     }
 
 
@@ -20,7 +21,7 @@ class ConsultType  extends AbstractType{
             ->add('busqueda','choice',array(
                 'label' => 'Busqueda',
                 'choices' => $this->option,
-                'empty_value' => '.: Seleccione :.',
+                'empty_value' => '',
                 'required' => false,
             ))
             ->add('criterio',null,array(
@@ -31,9 +32,19 @@ class ConsultType  extends AbstractType{
                 'label' => 'Médico',
                 'class' => 'INHack20\\ConsultorioBundle\\Entity\\Medico',
                 //'property' => 'nombre',
-                'empty_value' => '.: Seleccione :.',
+                'empty_value' => '',
                 'required' => false,
-            ))
+            ));
+        if($this->tipoConsulta){
+            $builder->add('tipoconsulta','entity',array(
+                'label' => 'Tipo de Consulta',
+                'class' => 'INHack20\\ConsultorioBundle\\Entity\\TipoConsulta',
+                'property' => 'significado',
+                'empty_value' => '',
+                'required' => false,
+            ));
+        }
+        $builder
             ->add('fechaDesde','datetime',array(
                 'label' => 'Desde',
                 'required' => false,
