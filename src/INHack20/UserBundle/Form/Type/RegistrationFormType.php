@@ -25,14 +25,6 @@ class RegistrationFormType extends BaseType
                 ->add('apellido')
                 ->add('cedula')
                 ->add('cargo')
-                ->add('unidadAdministrativa',null,array(
-                    'label' => 'Unidad Administrativa',
-                ))
-                ->add('estado','entity',array(
-                    'class' => 'INHack20\\UserBundle\\Entity\\Estado',
-                    'property' => 'nombre',
-                    'empty_value' => 'Seleccione',
-                ))
                ;
     }
 

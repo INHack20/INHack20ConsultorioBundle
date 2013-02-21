@@ -38,6 +38,12 @@ abstract class Persona {
     protected $fechaCreado;
 
     /**
+     * @var \Text 
+     * @ORM\Column(name="direccion", type="text")
+     */
+    protected $direccion;
+    
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fechaModificado", type="datetime", nullable=true)
@@ -118,5 +124,13 @@ abstract class Persona {
     public function getFechaModificado()
     {
         return $this->fechaModificado;
+    }
+    
+    public function getDireccion() {
+       return $this->direccion;
+    }
+
+    public function setDireccion($direccion) {
+       $this->direccion = $direccion;
     }
 }

@@ -301,7 +301,11 @@ class PacienteController extends Controller
         $qb = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
         $entities = Search::getSearchResult($this->options, $class, $view, $qb, true, $data);
         
-        $logo = $this->get('templating.helper.assets')->getUrl('/bundles/inhack20consultorio/images/logo_barrio.jpg');
+        $baseRoot = $this->getRequest()->server->get('DOCUMENT_ROOT');
+        $baseRoot[strlen($baseRoot) - 1 ] = NULL;
+        $baseRoot = trim($baseRoot);
+        $logo = $baseRoot . $this->get('templating.helper.assets')->getUrl('bundles/inhack20consultorio/images/logo_barrio.jpg');
+        $logo2 = $baseRoot . $this->get('templating.helper.assets')->getUrl('bundles/inhack20consultorio/images/logo_sistema.jpg');
         
         // set document information
         $pdf->SetCreator('Symfony2 PDF');
@@ -312,34 +316,19 @@ class PacienteController extends Controller
         $pdf->setTranslator($translator);
         $pdf->setTitulo($translator->trans('header.4',array(),'pdf'));
         $pdf->setLogo($logo);
+        $pdf->setLogo2($logo2);
+        $pdf->setResume(true);
         //set margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP + 15, PDF_MARGIN_RIGHT);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP + 25, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         
         $pdf->AddPage();
         
 $html = '
-    <table style="width: 100%;" border="0" cellpadding="2" cellspacing="2">
-            <tbody>
-                <tr>
-                    <td>'.$translator->trans('title.estado',array(),'pdf').':estado</td>
-                    <td>'.$translator->trans('title.nombreMedico',array(),'pdf').':nombreMedico</td>
-                    <td>'.$translator->trans('title.fecha',array(),'pdf').':fecha</td>
-                </tr>
-                <tr>
-                    <td>'.$translator->trans('title.municipio',array(),'pdf').':municipio</td>
-                    <td>'.$translator->trans('title.asic',array(),'pdf').':asic</td>
-                    <td>'.$translator->trans('title.consultorio',array(),'pdf').':consultorio</td>
-                </tr>
-            </tbody>
-    </table>
-';
+    <table style="width: 100%; text-align:center; " border="1" cellpadding="0" cellspacing="0">';
 
-$pdf->writeHTML($html, true, false, true, false, '');
-
-$html = '
-    <table style="width: 100%; text-align:center; " border="1" cellpadding="0" cellspacing="0">
+$html.='
         <tr>
             <th style="width: 4%;">Nº</th>
             <th style="width: 8%;">CEDULA</th>
@@ -350,18 +339,27 @@ $html = '
             <th style="width: 4%;">T</th>
             <th style="width: 20%;">DAGNÓSTICO</th>
             <th style="width: 20%;">TRATAMIENTO</th>
-        </tr>
+        </tr>';
+if($entities){
+   $i = 0;
+   foreach ($entities as $entity){
+   $html.='
         <tr>
-            <td>1</td>
-            <td>19108122</td>
-            <td>Carlos Mendoza</td>
-            <td>E</td>
-            <td>S</td>
-            <td>DIRECCIÓN</td>
-            <td>CN</td>
-            <td>DAGNÓSTICODAGNÓSTICODAGNÓSTICODAGNÓSTICO</td>
-            <td>TRATAMIENTO</td>
-        </tr>
+            <td>'.($i + 1).'</td>
+            <td>'.$entity->getCedula().'</td>
+            <td>'.$entity->getNombreCompleto().'</td>
+            <td>'.$entity->getEdad().'</td>
+            <td>'.$entity->getSexo().'</td>
+            <td>'.$entity->getDireccion().'</td>
+            <td>'.$entity->getTipoConsulta()->getAcronimo().'</td>
+            <td>'.$entity->getDiagnostico().'</td>
+            <td>'.$entity->getTratamiento().'</td>
+        </tr>';
+        $i++;
+        $pdf->setTotal($i);
+   }//fin for
+}
+$html.='
     </table>
 ';
 $pdf->SetFont('helvetica', '', 9);

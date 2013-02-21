@@ -16,8 +16,6 @@ class User extends BaseUser
 {
     private $roles_definidos = array(
                 'ROLE_USER' => 'Usuario',
-                'ROLE_SUPER_USER' => 'Super Usuario',
-                'ROLE_ADMIN' => 'Administrador',
                 'ROLE_SUPER_ADMIN' => 'Super Administrador');
     
     /**
@@ -52,14 +50,6 @@ class User extends BaseUser
      */
     private $unidadAdministrativa;
  
-    /**
-     *
-     * @var Estado $estado
-     * @ORM\ManyToOne(targetEntity="Estado")
-     * @ORM\JoinColumn(name="estado_id",referencedColumnName="id")
-     */
-    protected $estado;
-
     /**
      * Variable para asignar rol al usuario
      */

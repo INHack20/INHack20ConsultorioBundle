@@ -16,28 +16,24 @@ class UserType extends AbstractType
             ->add('nombre')
             ->add('apellido')
             ->add('cedula')
-            ->add('estado','entity',array(
-                'class' => 'INHack20\UserBundle\Entity\Estado',
-                    'property' => 'nombre',
-                    'empty_value' => 'Seleccione',
-            ))
             ->add('enabled',null,array(
                 'required' => false,
+                'label' => 'Habilitado',
             ))
             ->add('locked',null,array(
                 'required' => false,
+                'label' => 'Bloqueado',
             ))
             ->add('expiresAt','date',array(
                 'widget' => 'single_text',
                 'required' => false,
+                'label' => 'Expiracion',
             ))
             ->add('role', 'choice' , array(
                 'choices' => array(
                     '' => 'Seleccione',
                     'ROLE_USER' => 'USUARIO',
-                    'ROLE_SUPER_USER' => 'SUPER USUARIO',
-                    'ROLE_ADMIN' => 'ADMINISTRADOR',
-                    'ROLE_SUPER_ADMIN' => 'SUPER ADMINISTRADOR',
+                     'ROLE_SUPER_ADMIN' => 'SUPER ADMINISTRADOR',
                     ),
                 ))
         ;

@@ -30,7 +30,7 @@ class PacienteType extends AbstractType
             ->add('diagnostico')
             ->add('tratamiento')
             //->add('fechaCreado')
-            //->add('fechaModificado')
+            ->add('direccion')
             ->add('diario','entity',array(
                 'class' => 'INHack20\\ConsultorioBundle\\Entity\\Diario',
                 'property' => 'detalle',

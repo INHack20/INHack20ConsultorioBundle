@@ -1,4 +1,4 @@
-
+<div class="center">
 <form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(form) }} method="POST" class="fos_user_profile_edit">
     <br/>
     <fieldset>
@@ -6,9 +6,10 @@
             {{ form_widget(form.user,{'attr' : {'align' : 'center'} }) }}
             <table align="center"><tr><td>{{ form_rest(form) }}</td></tr></table>
             <p align="center">
-                    <button type="submit" class="css3button">
+                    <button type="submit" class="boton-v">
                         <img src="{{ asset('bundles/inhack20user/images/guardar.png') }}" width="16" height="16" alt="" />
                         {{ 'profile.edit.submit'|trans({}, 'FOSUserBundle') }}</button>
             </p>
     </fieldset>
 </form>
+</div>

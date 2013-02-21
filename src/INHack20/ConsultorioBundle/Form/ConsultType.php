@@ -10,9 +10,11 @@ class ConsultType  extends AbstractType{
     
     private $option;
     private $tipoConsulta;
-    public function __construct($option, $tipoConsulta = false){
+    private $medico;
+    public function __construct($option, $tipoConsulta = false,$medico = false){
         $this->option = $option;
         $this->tipoConsulta = $tipoConsulta;
+        $this->medico = $medico;
     }
 
 
@@ -27,14 +29,17 @@ class ConsultType  extends AbstractType{
             ->add('criterio',null,array(
                 'label' => 'Descripción',
                 'required' => false,
-            ))
-            ->add('medico','entity',array(
-                'label' => 'Médico',
-                'class' => 'INHack20\\ConsultorioBundle\\Entity\\Medico',
-                //'property' => 'nombre',
-                'empty_value' => '',
-                'required' => false,
             ));
+        if($this->medico){
+           $builder
+               ->add('medico','entity',array(
+                   'label' => 'Médico',
+                   'class' => 'INHack20\\ConsultorioBundle\\Entity\\Medico',
+                   //'property' => 'nombre',
+                   'empty_value' => '',
+                   'required' => false,
+               ));
+        }
         if($this->tipoConsulta){
             $builder->add('tipoconsulta','entity',array(
                 'label' => 'Tipo de Consulta',

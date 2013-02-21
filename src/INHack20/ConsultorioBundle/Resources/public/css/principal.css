@@ -18,7 +18,7 @@ a:hover		{text-decoration:none; }
 #header			{background:#1A292F; margin:0 auto; text-align:left; padding:20px 20px 20px 20px; width:830px; border-left:1px solid #637076; border-right:1px solid #637076; }
 #container		{margin:0 auto; text-align:left; padding:0 20px 20px 20px; width:830px; border-left:1px solid #637076; border-right:1px solid #637076; }
 #sub-container		{margin:0 auto; padding:20px 20px 20px 20px; width:830px; border-left:1px solid #637076; border-right:1px solid #637076; }
-h1#logo			{background:#E8EDF7; float:left; padding:7px 20px; width:110px; border:1px solid #FFFFFF; text-align:center; min-height:24px; }
+h1#logo			{background:#E8EDF7; float:left; width:110px; border:1px solid #FFFFFF; text-align:center; min-height:24px; }
 #pictureRail	{text-align:center; }
 #news			{background:#E8EDF7; float:left; width:200px; padding:20px 20px 5px 20px; border:1px solid #FFFFFF; }
 #menu			{background:#1A292F; margin:0 0 0 2px; border:1px solid #FFFFFF; padding:10px; color:#FFFFFF; text-align:center; }

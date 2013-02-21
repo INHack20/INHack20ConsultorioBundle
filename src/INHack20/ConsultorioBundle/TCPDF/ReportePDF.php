@@ -16,6 +16,7 @@ class ReportePDF extends \TCPDF {
     private $resume;
     private $total;
     private $logo;
+    private $logo2;
     
     public function __construct($orientation = 'L', $unit = 'mm', $format = 'letter', $unicode = true, $encoding = 'UTF-8', $diskcache = false, $pdfa = false) {
         parent::__construct($orientation, $unit, $format, $unicode, $encoding, $diskcache, $pdfa);
@@ -23,9 +24,12 @@ class ReportePDF extends \TCPDF {
     public function Header() {
         // Logo
         $image_file = $this->logo;
-        //$this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        //$image_file = K_PATH_IMAGES.'logo_example.jpg';
+        $this->Image($image_file, 18, 10, 30, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        $this->Image($this->logo2, 230, 10, 30, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         // Set font
         $this->SetFont('helvetica', 'B', 15);
+        $this->SetY(15);
         // Title
         $this->Cell(0, 15, $this->translator->trans('header.1',array(),'pdf'), 0, true, 'C', 0, '', 0, false, 'M', 'M');
         $this->Cell(0, 15, $this->translator->trans('header.2',array(),'pdf'), 0, true, 'C', 0, '', 0, false, 'M', 'M');
@@ -68,5 +72,8 @@ class ReportePDF extends \TCPDF {
     }
     public function setLogo($logo) {
        $this->logo = $logo;
+    }
+    public function setLogo2($logo2) {
+       $this->logo2 = $logo2;
     }
 }

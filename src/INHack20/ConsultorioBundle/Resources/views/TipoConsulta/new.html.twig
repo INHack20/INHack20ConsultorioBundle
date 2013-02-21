@@ -1,19 +1,13 @@
 {% extends 'INHack20ConsultorioBundle::layout.html.twig' %}
 {% block contenido %}
-    <h1>TipoConsulta creation</h1>
+<div class="center">
+    <h1 class="t1 separator-bottom">Crear Tipo de Consulta</h1>
 
     <form action="{{ path('tipoconsulta_create') }}" method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
         <p>
-            <button type="submit">Create</button>
+            <button class="boton-v separator-top" type="submit">Registar</button>            
         </p>
     </form>
-
-    <ul class="record_actions">
-        <li>
-            <a href="{{ path('tipoconsulta') }}">
-                Back to the list
-            </a>
-        </li>
-    </ul>
+</div>
 {% endblock %}

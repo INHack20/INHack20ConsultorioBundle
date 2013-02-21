@@ -246,7 +246,7 @@ class DiarioController extends Controller
     public function consultAction(){
         $request = $this->getRequest();
       
-        $form = $this->createForm(new ConsultType($this->options));  
+        $form = $this->createForm(new ConsultType($this->options,false,true));  
     
         if($request->getMethod() == 'POST' && $request->isXmlHttpRequest()){
             $class = "INHack20ConsultorioBundle:Diario";
@@ -271,7 +271,12 @@ class DiarioController extends Controller
         $pdf= $this->get('white_october.tcpdf')->create();
         $translator = $this->get('translator');
        
-        $logo = $this->get('templating.helper.assets')->getUrl('bundles/inhack20consultorio/images/logo_barrio.jpg');
+        $baseRoot = $this->getRequest()->server->get('DOCUMENT_ROOT');
+        $baseRoot[strlen($baseRoot) - 1 ] = NULL;
+        $baseRoot = trim($baseRoot);
+        $logo = $baseRoot . $this->get('templating.helper.assets')->getUrl('bundles/inhack20consultorio/images/logo_barrio.jpg');
+        $logo2 = $baseRoot . $this->get('templating.helper.assets')->getUrl('bundles/inhack20consultorio/images/logo_sistema.jpg');
+                
         // set document information
         $pdf->SetCreator('Symfony2 PDF');
         $pdf->SetAuthor('Barrio Adentro I');
@@ -281,8 +286,9 @@ class DiarioController extends Controller
         $pdf->setTranslator($translator);
         $pdf->setTitulo($translator->trans('header.5',array(),'pdf'));
         $pdf->setLogo($logo);
+        $pdf->setLogo2($logo2);
         //set margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP + 15, PDF_MARGIN_RIGHT);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP + 25, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         
@@ -353,7 +359,13 @@ $pdf->writeHTML($html, true, false, true, false, '');
         $logo = $this->get('templating.helper.assets')->getUrl('/bundles/inhack20consultorio/images/logo_barrio.jpg');
         $translator = $this->get('translator');
         
-        // set document information
+        $baseRoot = $this->getRequest()->server->get('DOCUMENT_ROOT');
+        $baseRoot[strlen($baseRoot) - 1 ] = NULL;
+        $baseRoot = trim($baseRoot);
+        $logo = $baseRoot . $this->get('templating.helper.assets')->getUrl('bundles/inhack20consultorio/images/logo_barrio.jpg');
+        $logo2 = $baseRoot . $this->get('templating.helper.assets')->getUrl('bundles/inhack20consultorio/images/logo_sistema.jpg');
+        
+         // set document information
         $pdf->SetCreator('Symfony2 PDF');
         $pdf->SetAuthor('Barrio Adentro I');
         $pdf->SetTitle('Reporte');
@@ -362,9 +374,10 @@ $pdf->writeHTML($html, true, false, true, false, '');
         $pdf->setTranslator($translator);
         $pdf->setTitulo($translator->trans('header.4',array(),'pdf'));
         $pdf->setLogo($logo);
+        $pdf->setLogo2($logo2);
         $pdf->setResume(true);
         //set margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP + 15, PDF_MARGIN_RIGHT);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP + 25, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         
@@ -412,7 +425,7 @@ if($pacientes){
             <td>'.$paciente->getNombreCompleto().'</td>
             <td>'.$paciente->getEdad().'</td>
             <td>'.$paciente->getSexo().'</td>
-            <td></td>
+            <td>'.$paciente->getDireccion().'</td>
             <td>'.$paciente->getTipoConsulta()->getAcronimo().'</td>
             <td>'.$paciente->getDiagnostico().'</td>
             <td>'.$paciente->getTratamiento().'</td>
@@ -420,11 +433,11 @@ if($pacientes){
         $i++;
    }//fin foreach
    $pdf->setTotal($i);
-}
-else{
-   $html.='<tr>
+   if($i == 0){
+      $html.='<tr>
             <td colspan="9">No se encontraron resultados.</td>
         </tr>';
+   }
 }
 $html.='
     </table>

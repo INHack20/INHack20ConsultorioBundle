@@ -1,14 +1,14 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 {% block fos_user_content %}
-<h1 class="textoDecorado">Cuentas de usuarios</h1>
+<div class="center">
+<h1 class="t1 separator-bottom">Cuentas de usuarios</h1>
     <br/><br/>
-<table class="tableCSS">
+<table class="tabla-1">
   <thead>
     <tr>
         <th>Usuario</th>
         <th>Email</th>
         <th>Nombre Completo</th>
-        <th>Estado</th>
         <th>ROL</th>
         <th>Estatus</th>
         <th></th>
@@ -21,7 +21,6 @@
             <td>{{ usuario.username }}</td>
             <td>{{ usuario.email }}</td>
             <td>{{ usuario.nombre }} {{ usuario.apellido }}</td>
-            <td>{% if usuario.estado %}{{ usuario.estado.nombre }}{% endif %}</td>
             <td>{{ usuario.roledescripcion }}</td>
             <td>{% if usuario.isEnabled %}
                     <font color="green">Activada</font>
@@ -45,10 +44,9 @@
 </table>
     <br/><br/>
     <p align="right">
-                <a href="{{ path('fos_user_registration_register') }}"><button id="btnBuscar" class="css3button" style="min-width: 10px">
+                <a href="{{ path('fos_user_registration_register') }}"><button id="btnBuscar" class="boton-v" style="min-width: 10px">
                 <img src="{{ asset('bundles/inhack20user/images/registrar.png') }}" width="16" height="16" alt="" />
                 Registrar</button></a>
     </p>
+</div>
 {% endblock fos_user_content %}
-
-

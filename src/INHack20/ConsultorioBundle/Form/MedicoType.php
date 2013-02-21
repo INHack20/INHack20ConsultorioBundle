@@ -30,7 +30,7 @@ class MedicoType extends AbstractType
                                    'F' => 'Femenino'),
                 'empty_value' => '.: Seleccione :.'
             ))
-            //->add('fechaCreado')
+            ->add('direccion')
            // ->add('fechaModificado')
         ;
     }

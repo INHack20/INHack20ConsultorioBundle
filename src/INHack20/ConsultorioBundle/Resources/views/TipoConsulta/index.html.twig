@@ -1,15 +1,16 @@
 {% extends 'INHack20ConsultorioBundle::layout.html.twig' %}
 {% block contenido %}
-    <h1>TipoConsulta list</h1>
-
-    <table class="records_list">
+<div class="center">
+    <h1 class="t1 center separator-bottom">Tipo de Consulta</h1>
+    
+    <table class="records_list tabla-1">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Acronimo</th>
                 <th>Significado</th>
                 <th>Creado</th>
-                <th>Actions</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -18,14 +19,14 @@
                 <td><a href="{{ path('tipoconsulta_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                 <td>{{ entity.acronimo }}</td>
                 <td>{{ entity.significado }}</td>
-                <td>{% if entity.creado %}{{ entity.creado|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.creado %}{{ entity.creado|date('Y-m-d h:i:s a') }}{% endif %}</td>
                 <td>
                     <ul>
                         <li>
-                            <a href="{{ path('tipoconsulta_show', { 'id': entity.id }) }}">show</a>
+                            <a href="{{ path('tipoconsulta_show', { 'id': entity.id }) }}">Ver</a>
                         </li>
                         <li>
-                            <a href="{{ path('tipoconsulta_edit', { 'id': entity.id }) }}">edit</a>
+                            <a href="{{ path('tipoconsulta_edit', { 'id': entity.id }) }}">Editar</a>
                         </li>
                     </ul>
                 </td>
@@ -33,12 +34,8 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('tipoconsulta_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
+    <div class="right separator-top">
+        <a href="{{ path('tipoconsulta_new') }}" class="boton-v">Nuevo</a>
+    </div>
+</div>
 {% endblock %}

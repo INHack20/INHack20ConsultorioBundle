@@ -11,7 +11,7 @@
     </form>
 
     <div class="record_actions">
-        <a class="boton-v float-left" href="{{ path('diario') }}">
+        <a class="boton-v float-left" href="{{ path('diario_today') }}">
                 Regresar
         </a>
         <form action="{{ path('diario_delete', { 'id': entity.id }) }}" method="post">

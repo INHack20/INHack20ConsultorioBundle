@@ -1,12 +1,12 @@
-
-<h1 class="textoDecorado">Registro de Usuario</h1>
-    <br/><br/>
+<div class="center">
+<h1 class="t1 separator-bottom">Registro de Usuario</h1>
     <fieldset>
         <legend>Datos</legend>
             <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
                 {{ form_widget(form,{'attr' : {'align' : 'center'} }) }}
             <br/><br/>
             <p align="center">
-                <button type="submit" class="css3button">{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}</button>
+                <button type="submit" class="boton-v">{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}</button>
             </p>
     </fieldset>
+</div>
