@@ -1,6 +1,6 @@
 {
-    "name": "symfony/framework-standard-edition",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "name": "inhack20/inhack20consultoriobundle",
+    "description": "Sistema de información automatizado para el registro y control de pacientes",
     "autoload": {
         "psr-0": { "": "src/" }
     },

@@ -1,176 +1,87 @@
-Symfony Standard Edition
+Sistema De Información Automatizado Para El Registro Y Control De Pacientes En El Consultorio De Barrio Adentro
 ========================
 
-Welcome to the Symfony Standard Edition - a fully-functional Symfony2
-application that you can use as the skeleton for your new applications.
+Sistema de información automatizado para el registro y control de pacientes que asisten al consultorio 
+de barrio adentro
 
-This document contains information on how to download, install, and start
-using Symfony. For a more detailed explanation, see the [Installation][1]
-chapter of the Symfony Documentation.
-
-1) Installing the Standard Edition
+1) Pasos de Instalacion
 ----------------------------------
 
-When it comes to installing the Symfony Standard Edition, you have the
-following options.
+Antes de instalar la aplicacion debes tener configurado adecuadamente tu servidor.
 
-### Use Composer (*recommended*)
+### Descargue una version de Symfony2 (Opcional)
 
-As Symfony uses [Composer][2] to manage its dependencies, the recommended way
-to create a new project is to use it.
+   Para asegurarse que su servidor corre adecuamente descarge e instale [Symfony2] [1]
 
-If you don't have Composer yet, download it following the instructions on
-http://getcomposer.org/ or just run the following command:
+### Use Composer (*recomendado*)
+
+Symfony2 utiliza [Composer] [2] para la gestión de sus dependencias.
+
+Si usted no tiene Composer aún , descargar siguiendo las instrucciones de
+http://getcomposer.org/ o simplemente ejecutar el siguiente comando:
 
     curl -s https://getcomposer.org/installer | php
 
-Then, use the `create-project` command to generate a new Symfony application:
+Composer instala Symfony y todas sus dependencias
+`path/to/install` directorio.
 
-    php composer.phar create-project symfony/framework-standard-edition path/to/install 2.1.x-dev
+2) Descargando una version
+-------------------------------------
 
-For an exact version, replace 2.1.x-dev with the latest Symfony version (e.g. 2.1.1).
+Antes de seguir debes haber comprobado que Symfony2 funciona correctamente en tu Servidor
 
-Composer will install Symfony and all its dependencies under the
-`path/to/install` directory.
+### Descargar una version
 
-### Download an Archive File
+Lo descomprimes en tu www o htdocs y actualiza el archivo "parameters.yml":
 
-To quickly test Symfony, you can also download an [archive][3] of the Standard
-Edition and unpack it somewhere under your web server root directory.
+   parameters:
+    database_driver: pdo_mysql
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: consultorioBA
+    database_user: root
+    database_password: null
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    locale: es
+    secret: xxxxxxxxxxxxxxx
+    database_path: null
 
-If you downloaded an archive "without vendors", you also need to install all
-the necessary dependencies. Download composer (see above) and run the
-following command:
+Luego ejecutas el comando desde una terminal para descargarte todas las librerias necesarias:
 
     php composer.phar install
 
-2) Checking your System Configuration
--------------------------------------
+Creamos la base de datos:
 
-Before starting coding, make sure that your local system is properly
-configured for Symfony.
+    php app/console doctrine:database:create
 
-Execute the `check.php` script from the command line:
+Creamos la estructura de las tablas:
 
-    php app/check.php
+   php app/console doctrine:schema:create
 
-Access the `config.php` script from a browser:
+Cargamos los fixtures de la aplicacion:
 
-    http://localhost/path/to/symfony/app/web/config.php
+   php app/console doctrine:fixtures:load
 
-If you get any warnings or recommendations, fix them before moving on.
+Si luego de ejecutar algun paso tienes alguna advertencia, debes resolverla antes de continuar.
 
-3) Browsing the Demo Application
+3) Abriendo La Aplicacion Por Primera Vez
 --------------------------------
 
-Congratulations! You're now ready to use Symfony.
+Debes acceder a traves de tu navegador a la url:
 
-From the `config.php` page, click the "Bypass configuration and go to the
-Welcome page" link to load up your first Symfony page.
+   localhost/{app}/web/app.php/
 
-You can also use a web-based configurator by clicking on the "Configure your
-Symfony Application online" link of the `config.php` page.
+Al ingresar a la URL inmediatamente te pedira un usuario y contraseña (estos se cargaron con los fixtures):
 
-To see a real-live Symfony page in action, access the following page:
+   Usuario: admin
+   Contraseña: adminadmin
 
-    web/app_dev.php/demo/hello/Fabien
-
-4) Getting started with Symfony
--------------------------------
-
-This distribution is meant to be the starting point for your Symfony
-applications, but it also contains some sample code that you can learn from
-and play with.
-
-A great way to start learning Symfony is via the [Quick Tour][4], which will
-take you through all the basic features of Symfony2.
-
-Once you're feeling good, you can move onto reading the official
-[Symfony2 book][5].
-
-A default bundle, `AcmeDemoBundle`, shows you Symfony2 in action. After
-playing with it, you can remove it by following these steps:
-
-  * delete the `src/Acme` directory;
-
-  * remove the routing entries referencing AcmeBundle in
-    `app/config/routing_dev.yml`;
-
-  * remove the AcmeBundle from the registered bundles in `app/AppKernel.php`;
-
-  * remove the `web/bundles/acmedemo` directory;
-
-  * remove the `security.providers`, `security.firewalls.login` and
-    `security.firewalls.secured_area` entries in the `security.yml` file or
-    tweak the security configuration to fit your needs.
-
-What's inside?
----------------
-
-The Symfony Standard Edition is configured with the following defaults:
-
-  * Twig is the only configured template engine;
-
-  * Doctrine ORM/DBAL is configured;
-
-  * Swiftmailer is configured;
-
-  * Annotations for everything are enabled.
-
-It comes pre-configured with the following bundles:
-
-  * **FrameworkBundle** - The core Symfony framework bundle
-
-  * [**SensioFrameworkExtraBundle**][6] - Adds several enhancements, including
-    template and routing annotation capability
-
-  * [**DoctrineBundle**][7] - Adds support for the Doctrine ORM
-
-  * [**TwigBundle**][8] - Adds support for the Twig templating engine
-
-  * [**SecurityBundle**][9] - Adds security by integrating Symfony's security
-    component
-
-  * [**SwiftmailerBundle**][10] - Adds support for Swiftmailer, a library for
-    sending emails
-
-  * [**MonologBundle**][11] - Adds support for Monolog, a logging library
-
-  * [**AsseticBundle**][12] - Adds support for Assetic, an asset processing
-    library
-
-  * [**JMSSecurityExtraBundle**][13] - Allows security to be added via
-    annotations
-
-  * [**JMSDiExtraBundle**][14] - Adds more powerful dependency injection
-    features
-
-  * **WebProfilerBundle** (in dev/test env) - Adds profiling functionality and
-    the web debug toolbar
-
-  * **SensioDistributionBundle** (in dev/test env) - Adds functionality for
-    configuring and working with Symfony distributions
-
-  * [**SensioGeneratorBundle**][15] (in dev/test env) - Adds code generation
-    capabilities
-
-  * **AcmeDemoBundle** (in dev/test env) - A demo bundle with some example
-    code
+Si el sistema te da la bienvenida en la pagina de inicio, significa que todo ha salido correctamente.
 
 Enjoy!
 
 [1]:  http://symfony.com/doc/2.1/book/installation.html
 [2]:  http://getcomposer.org/
-[3]:  http://symfony.com/download
-[4]:  http://symfony.com/doc/2.1/quick_tour/the_big_picture.html
-[5]:  http://symfony.com/doc/2.1/index.html
-[6]:  http://symfony.com/doc/2.1/bundles/SensioFrameworkExtraBundle/index.html
-[7]:  http://symfony.com/doc/2.1/book/doctrine.html
-[8]:  http://symfony.com/doc/2.1/book/templating.html
-[9]:  http://symfony.com/doc/2.1/book/security.html
-[10]: http://symfony.com/doc/2.1/cookbook/email.html
-[11]: http://symfony.com/doc/2.1/cookbook/logging/monolog.html
-[12]: http://symfony.com/doc/2.1/cookbook/assetic/asset_management.html
-[13]: http://jmsyst.com/bundles/JMSSecurityExtraBundle/master
-[14]: http://jmsyst.com/bundles/JMSDiExtraBundle/master
-[15]: http://symfony.com/doc/2.1/bundles/SensioGeneratorBundle/index.html
