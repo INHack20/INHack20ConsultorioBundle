@@ -11,7 +11,7 @@ Antes de instalar la aplicacion debes tener configurado adecuadamente tu servido
 
 ### Descargue una version de Symfony2 (Opcional)
 
-   Para asegurarse que su servidor corre adecuamente descarge e instale [Symfony2] [1]
+    Para asegurarse que su servidor corre adecuamente descarge e instale [Symfony2] [1]
 
 ### Use Composer (*recomendado*)
 
@@ -34,7 +34,7 @@ Antes de seguir debes haber comprobado que Symfony2 funciona correctamente en tu
 
 Lo descomprimes en tu www o htdocs y actualiza el archivo "parameters.yml":
 
-   parameters:
+    parameters:
     database_driver: pdo_mysql
     database_host: 127.0.0.1
     database_port: null
@@ -59,11 +59,11 @@ Creamos la base de datos:
 
 Creamos la estructura de las tablas:
 
-   php app/console doctrine:schema:create
+    php app/console doctrine:schema:create
 
 Cargamos los fixtures de la aplicacion:
 
-   php app/console doctrine:fixtures:load
+    php app/console doctrine:fixtures:load
 
 Si luego de ejecutar algun paso tienes alguna advertencia, debes resolverla antes de continuar.
 
@@ -72,12 +72,12 @@ Si luego de ejecutar algun paso tienes alguna advertencia, debes resolverla ante
 
 Debes acceder a traves de tu navegador a la url:
 
-   localhost/{app}/web/app.php/
+    localhost/{app}/web/app.php/
 
 Al ingresar a la URL inmediatamente te pedira un usuario y contraseña (estos se cargaron con los fixtures):
 
-   Usuario: admin
-   Contraseña: adminadmin
+    Usuario: admin
+    Contraseña: adminadmin
 
 Si el sistema te da la bienvenida en la pagina de inicio, significa que todo ha salido correctamente.
 
