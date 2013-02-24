@@ -35,19 +35,20 @@ Antes de seguir debes haber comprobado que Symfony2 funciona correctamente en tu
 Lo descomprimes en tu www o htdocs y actualiza el archivo "parameters.yml":
 
     parameters:
-    database_driver: pdo_mysql
-    database_host: 127.0.0.1
-    database_port: null
-    database_name: consultorioBA
-    database_user: root
-    database_password: null
-    mailer_transport: smtp
-    mailer_host: 127.0.0.1
-    mailer_user: null
-    mailer_password: null
-    locale: es
-    secret: xxxxxxxxxxxxxxx
-    database_path: null
+        database_driver: pdo_mysql
+        database_host: 127.0.0.1
+        database_port: null
+        database_name: consultorioBA
+        database_user: root
+        database_password: null
+        mailer_transport: smtp
+        mailer_host: 127.0.0.1
+        mailer_user: null
+        mailer_password: null
+        locale: es
+        secret: xxxxxxxxxxxxxxx
+        database_path: null
+    
 
 Luego ejecutas el comando desde una terminal para descargarte todas las librerias necesarias:
 
