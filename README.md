@@ -50,7 +50,7 @@ Lo descomprimes en tu www o htdocs y actualiza el archivo "parameters.yml":
         database_path: null
     
 
-Luego ejecutas el comando desde una terminal para descargarte todas las librerias necesarias:
+Luego abres una terminal y te ubicas en el directorio donde descomprimiste la aplicación y ejecutas los siguientes comandos para descargarte todas las librerias necesarias y configurar los requerimientos basico de la aplicación:
 
     php composer.phar install
 
